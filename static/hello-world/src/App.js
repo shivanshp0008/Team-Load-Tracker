@@ -12,6 +12,9 @@ function App() {
         <div>
             {data ? data : 'Loading...'}
         </div>
+
+
+
     );
 }
 
