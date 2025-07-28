@@ -9,9 +9,12 @@ function App() {
     }, []);
 
     return (
-        <div>
+<>
+
+<div>
             {data ? data : 'Loading...'}
         </div>
+</>
 
 
 
