@@ -1,0 +1,19 @@
+modules:
+  jira:projectPage:
+    - key: team-load-tracker-hello-world-project-page
+      resource: main
+      resolver:
+        function: resolver
+      title: Team Load Tracker
+  function:
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: main
+    path: static/hello-world/build
+app:
+  runtime:
+    name: nodejs22.x
+    memoryMB: 256
+    architecture: arm64
+  id: ari:cloud:ecosystem::app/a56c026a-eb29-4910-944a-083c212b2ec8
