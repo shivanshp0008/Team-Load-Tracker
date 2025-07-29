@@ -7,7 +7,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 
-const WorkFlowAging = ({ data }) => {
+const WorkFlowAging = ({ data, filters, onBack }) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -15,10 +15,35 @@ const WorkFlowAging = ({ data }) => {
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
-      const isCurrentlyVisible = prev[columnId];
-      return isCurrentlyVisible ? {} : { [columnId]: true };
+      const isVisible = prev[columnId];
+      return isVisible ? {} : { [columnId]: true };
     });
   };
+
+  const filteredData = useMemo(() => {
+    if (!filters) return data;
+
+    const { selectedOptions, fromDate, toDate } = filters;
+    const selectedAssigneeIds = selectedOptions?.map(opt => opt.value);
+
+    return data.filter(issue => {
+      const assigneeId = issue.fields?.assignee?.accountId;
+      const created = issue.fields?.created;
+
+      const matchAssignee =
+        !selectedAssigneeIds || selectedAssigneeIds.length === 0
+          ? true
+          : selectedAssigneeIds.includes(assigneeId);
+
+      const matchDate =
+        fromDate && toDate
+          ? new Date(created) >= new Date(fromDate) &&
+            new Date(created) <= new Date(toDate)
+          : true;
+
+      return matchAssignee && matchDate;
+    });
+  }, [data, filters]);
 
   const columns = useMemo(() => [
     {
@@ -49,7 +74,7 @@ const WorkFlowAging = ({ data }) => {
   ], []);
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     state: {
       globalFilter,
@@ -64,9 +89,16 @@ const WorkFlowAging = ({ data }) => {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  console.log("fiter data", filteredData);
+
   return (
     <div className="table-wrapper">
-      <div className='search-container'>
+
+      <div className="search-container">
+        <div className="table-header">
+        <button onClick={onBack} className="back-btn">← Back to Form</button>
+      </div>
+        <div>
         <input
           type="text"
           placeholder="Global search..."
@@ -74,6 +106,7 @@ const WorkFlowAging = ({ data }) => {
           onChange={(e) => setGlobalFilter(e.target.value)}
           className="table-search"
         />
+        </div>
       </div>
 
       <table className="data-table">
@@ -106,7 +139,7 @@ const WorkFlowAging = ({ data }) => {
                     )}
                   </div>
                   {visibleFilters[header.column.id] && (
-                    <div className='filter-container'>
+                    <div className="filter-container">
                       <input
                         className="column-filter"
                         type="text"
