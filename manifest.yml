@@ -11,6 +11,7 @@ modules:
 resources:
   - key: main
     path: static/hello-world/build
+
 app:
   runtime:
     name: nodejs22.x
