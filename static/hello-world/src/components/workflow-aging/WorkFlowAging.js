@@ -11,39 +11,40 @@ const WorkFlowAging = ({ data }) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
-  const [visibleFilters, setVisibleFilters] = useState({}); // NEW STATE
+  const [visibleFilters, setVisibleFilters] = useState({});
 
-const toggleFilter = (columnId) => {
-  setVisibleFilters((prev) => {
-    const isCurrentlyVisible = prev[columnId];
-    // Close all, then open only the one clicked (if it wasn't already open)
-    return isCurrentlyVisible ? {} : { [columnId]: true };
-  });
-};
-
+  const toggleFilter = (columnId) => {
+    setVisibleFilters((prev) => {
+      const isCurrentlyVisible = prev[columnId];
+      return isCurrentlyVisible ? {} : { [columnId]: true };
+    });
+  };
 
   const columns = useMemo(() => [
     {
-      header: 'ID',
-      accessorKey: 'id',
-      filterFn: 'includesString',
-      cell: info => info.getValue(),
-    },
-    {
-      header: 'First Name',
-      accessorKey: 'firstName',
+      header: 'Issue Key',
+      accessorKey: 'key',
       filterFn: 'includesString',
     },
     {
-      header: 'Last Name',
-      accessorKey: 'lastName',
+      header: 'Summary',
+      accessorFn: row => {
+        const summary = row.fields.summary;
+        return typeof summary === 'string'
+          ? summary
+          : summary?.content?.[0]?.content?.[0]?.text || '[Unsupported Format]';
+      },
       filterFn: 'includesString',
     },
     {
-      header: 'Age',
-      accessorKey: 'age',
+      header: 'Status',
+      accessorFn: row => row.fields.status.name,
       filterFn: 'includesString',
-      cell: info => info.getValue(),
+    },
+    {
+      header: 'Assignee',
+      accessorFn: row => row.fields.assignee?.displayName || 'Unassigned',
+      filterFn: 'includesString',
     },
   ], []);
 
@@ -66,13 +67,13 @@ const toggleFilter = (columnId) => {
   return (
     <div className="table-wrapper">
       <div className='search-container'>
-      <input
-        type="text"
-        placeholder="Global search..."
-        value={globalFilter ?? ''}
-        onChange={(e) => setGlobalFilter(e.target.value)}
-        className="table-search"
-      />
+        <input
+          type="text"
+          placeholder="Global search..."
+          value={globalFilter ?? ''}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          className="table-search"
+        />
       </div>
 
       <table className="data-table">
@@ -82,22 +83,29 @@ const toggleFilter = (columnId) => {
               {headerGroup.headers.map(header => (
                 <th key={header.id}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span onClick={header.column.getToggleSortingHandler()} style={{ cursor: 'pointer' }}>
+                    <span
+                      onClick={header.column.getToggleSortingHandler()}
+                      style={{ cursor: 'pointer' }}
+                    >
                       {flexRender(header.column.columnDef.header, header.getContext())}
-<span className="sort-icon">
-  {header.column.getIsSorted() === 'asc'
-    ? '🔼'
-    : header.column.getIsSorted() === 'desc'
-    ? '🔽'
-    : '🔼'}
-</span>
+                      <span className="sort-icon">
+                        {header.column.getIsSorted() === 'asc'
+                          ? '🔼'
+                          : header.column.getIsSorted() === 'desc'
+                          ? '🔽'
+                          : '🔼'}
+                      </span>
                     </span>
                     {header.column.getCanFilter() && (
                       <button
-  onClick={() => toggleFilter(header.column.id)}
-  className={`filter-toggle-btn ${visibleFilters[header.column.id] ? 'active' : ''}`}
->
-  {visibleFilters[header.column.id] && (
+                        onClick={() => toggleFilter(header.column.id)}
+                        className={`filter-toggle-btn ${visibleFilters[header.column.id] ? 'active' : ''}`}
+                      >
+                        ☰
+                      </button>
+                    )}
+                  </div>
+                  {visibleFilters[header.column.id] && (
                     <div className='filter-container'>
                       <input
                         className="column-filter"
@@ -107,11 +115,7 @@ const toggleFilter = (columnId) => {
                         placeholder={`Filter...`}
                       />
                     </div>
-                  )} ☰
-</button>
-                    )}
-                  </div>
-                  
+                  )}
                 </th>
               ))}
             </tr>

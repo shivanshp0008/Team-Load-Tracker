@@ -68,6 +68,29 @@
   justify-content: flex-end;
 }
 
+/* Tab  */
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.tab-buttons .active-tab {
+  background-color: #007bff;
+  color: white;
+}
+
+
 /* For tablets and smaller laptops */
 @media (max-width: 1024px) {
   .table-search {

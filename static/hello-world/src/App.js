@@ -1,25 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { invoke } from "@forge/bridge";
-import WorkFlowAging from "./workflow-aging/WorkFlowAging";
-
+import React, { useEffect, useState } from 'react';
+import { invoke, view } from '@forge/bridge';
+import Home from './components/Home';
 
 function App() {
-  const [data, setData] = useState(null);
+  const [projectKey, setProjectKey] = useState(null);
+  const [allIssues, setAllIssues] = useState([]);
 
   useEffect(() => {
-    invoke("getText", { example: "my-invoke-variable" }).then(setData);
-  }, []);
+    const fetchContext = async () => {
+      const context = await view.getContext();
+      const key = context?.extension?.project?.key;
+      setProjectKey(key);
 
-  const datas = [
-  { id: 1, firstName: 'Jon', lastName: 'Snow', age: 35 },
-  { id: 2, firstName: 'Arya', lastName: 'Stark', age: 18 },
-  { id: 3, firstName: 'Tyrion', lastName: 'Lannister', age: 40 },
-];
+      try {
+        const issues = await invoke('getIssues', { projectKey: key });
+        setAllIssues(issues);
+      } catch (error) {
+        console.error('Error fetching issues:', error);
+        setAllIssues([]);
+      }
+    };
+
+    fetchContext();
+  }, []);
 
   return (
     <>
-      <div>{data ? data : "Loading..."}</div>
-      <WorkFlowAging data={datas} />
+      <Home data={Array.isArray(allIssues) ? allIssues : []} />
     </>
   );
 }
