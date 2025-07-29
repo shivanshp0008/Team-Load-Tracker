@@ -1,0 +1,106 @@
+.column-filter {
+  margin-top: 4px;
+  padding: 4px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.table-wrapper {
+  padding: 1rem;
+  overflow-x: auto;
+}
+.filter-container{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.table-search {
+ padding: 8px;
+  width: 25%;
+  min-width: 150px;
+  max-width: 100%;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  transition: width 0.2s ease;
+}
+
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ccc;
+  padding: 10px !important;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+}
+
+.filter-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 5px;
+  padding: 0;
+}
+
+.filter-toggle-btn.active {
+  color: #0052cc; /* or any color to highlight the active one */
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+
+.search-container{
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Tab  */
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.tab-buttons .active-tab {
+  background-color: #007bff;
+  color: white;
+}
+
+
+/* For tablets and smaller laptops */
+@media (max-width: 1024px) {
+  .table-search {
+    width: 40%;
+  }
+}
+
+/* For mobile screens */
+@media (max-width: 600px) {
+  .table-search {
+    width: 90%;
+  }
+}

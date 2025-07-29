@@ -11,6 +11,14 @@ modules:
 resources:
   - key: main
     path: static/hello-world/build
+permissions:
+  scopes:
+    - read:jira-work
+    - write:jira-work
+  external:
+    fetch:
+      backend:
+        - '*.atlassian.net'
 app:
   runtime:
     name: nodejs22.x
