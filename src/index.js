@@ -23,7 +23,7 @@ resolver.define('getIssues', async (req) => {
     }
 });
 
-resolver.define('getIssuesById', async (req) => {
+resolver.define('getIssueById', async (req) => {
   const { IssueId } = req.payload;
 
   try {
@@ -45,5 +45,26 @@ resolver.define('getIssuesById', async (req) => {
     throw new Error('Failed to fetch issue by ID');
   }
 });
+
+resolver.define('getIssueLogById', async (req) => {
+  const { IssueId } = req.payload;
+
+  try {
+    const response = await api.asApp().requestJira(route`/rest/api/3/issue/${IssueId}/changelog`, {
+      headers: { 'Accept': 'application/json' },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error fetching issue: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching issue by ID:', error);
+    throw new Error('Failed to fetch issue by ID');
+  }
+});
+
 
 export const handler = resolver.getDefinitions();
