@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TeamAlocation from "./team-alocation/TeamAlocation";
+import TeamAlocation from "./team-alocation/TeamAllocation";
 import WorkFlowAging from "./workflow-aging/WorkFlowAging";
 import WorkFlowForm from "./workflow-aging/WorkFlowForm";
 import TeamAllocationForm from "./team-alocation/TeamAllocationForm";
@@ -12,6 +12,7 @@ const Home = ({ data }) => {
 
   const handleWorkflowSubmit = (submittedData) => {
     setWorkflowFormData(submittedData);
+    console.log("Workflow Form Submitted Data:", submittedData);
   };
 
   const handleTeamSubmit = (submittedData) => {
@@ -29,23 +30,27 @@ const Home = ({ data }) => {
   return (
     <>
       <div className="tab-buttons">
-        <button
-          onClick={() => {
-            setActiveTab("workflow");
-            setWorkflowFormData(null);
-          }}
-        >
-          Workflow Aging
-        </button>
-        <button
-          onClick={() => {
-            setActiveTab("team");
-            setTeamFormData(null);
-          }}
-        >
-          Team Allocation
-        </button>
-      </div>
+  <button
+    onClick={() => {
+      setActiveTab("workflow");
+      setWorkflowFormData(null);
+    }}
+    className={activeTab === "workflow" ? "tab active-tab" : "tab inactive-tab"}
+  >
+    Workflow Aging
+  </button>
+
+  <button
+    onClick={() => {
+      setActiveTab("team");
+      setTeamFormData(null);
+    }}
+    className={activeTab === "team" ? "tab active-tab" : "tab inactive-tab"}
+  >
+    Team Allocation
+  </button>
+</div>
+
 
       {activeTab === "workflow" && !workflowFormData && (
         <WorkFlowForm data={data} onSubmit={handleWorkflowSubmit} />

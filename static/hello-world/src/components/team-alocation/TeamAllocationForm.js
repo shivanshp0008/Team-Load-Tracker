@@ -1,10 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const TeamAllocationForm = ({ data, onSubmit }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
+const [fromDate, setFromDate] = useState(null);
+const [toDate, setToDate] = useState(null);
   const [errors, setErrors] = useState({});
 
   // Dynamically extract unique assignees from issue data
@@ -22,12 +25,16 @@ const TeamAllocationForm = ({ data, onSubmit }) => {
     return Array.from(uniqueMap.values());
   }, [data]);
 
+  const fromDateRef = useRef();
+const toDateRef = useRef();
+
   const toggleOption = (option) => {
     if (selectedOptions.find(o => o.value === option.value)) {
       setSelectedOptions(prev => prev.filter(o => o.value !== option.value));
     } else {
       setSelectedOptions(prev => [...prev, option]);
     }
+        setDropdownOpen(false);
   };
 
   const removeOption = (value) => {
@@ -103,27 +110,34 @@ const TeamAllocationForm = ({ data, onSubmit }) => {
         {errors.select && <div className="error-text">{errors.select}</div>}
       </div>
 
-      <div className="form-group">
-        <label htmlFor="fromDate">From Date:</label>
-        <input
-          type="date"
-          id="fromDate"
-          value={fromDate}
-          onChange={(e) => setFromDate(e.target.value)}
-        />
-        {errors.fromDate && <div className="error-text">{errors.fromDate}</div>}
-      </div>
+      <div className="form-group" onClick={() => fromDateRef.current?.focus()}>
+  <label>From Date:</label>
+  <DatePicker
+    selected={fromDate}
+    onChange={(date) => setFromDate(date)}
+    placeholderText="Select a date"
+    inputRef={fromDateRef}
+    className="custom-datepicker"
+    dateFormat="MM/dd/yyyy"
+  />
+  {errors.fromDate && <div className="error-text">{errors.fromDate}</div>}
+</div>
 
-      <div className="form-group">
-        <label htmlFor="toDate">To Date:</label>
-        <input
-          type="date"
-          id="toDate"
-          value={toDate}
-          onChange={(e) => setToDate(e.target.value)}
-        />
-        {errors.toDate && <div className="error-text">{errors.toDate}</div>}
-      </div>
+<div className="form-group" onClick={() => toDateRef.current?.focus()}>
+  <label>To Date:</label>
+  <DatePicker
+    selected={toDate}
+    onChange={(date) => setToDate(date)}
+    placeholderText="Select a date"
+    inputRef={toDateRef}
+    className="custom-datepicker"
+    dateFormat="MM/dd/yyyy"
+    minDate={fromDate}
+  />
+  {errors.toDate && <div className="error-text">{errors.toDate}</div>}
+</div>
+
+
 
       <button type="submit" className="submit-btn">Submit</button>
     </form>
