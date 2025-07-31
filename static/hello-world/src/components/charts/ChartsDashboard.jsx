@@ -476,7 +476,7 @@ const ChartsDashboard = ({ data }) => {
               if (value.count >= 5) return "color-github-4";
               if (value.count >= 3) return "color-github-3";
               if (value.count >= 2) return "color-github-2";
-              return "color-github-1";
+              return "color-github-1 ";
             }}
             tooltipDataAttrs={(value) =>
               value.date ? { "data-tip": `${value.date}: ${value.count} issue(s)` } : {}
