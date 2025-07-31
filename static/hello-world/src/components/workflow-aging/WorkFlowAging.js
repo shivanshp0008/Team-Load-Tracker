@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from "react";
-import { invoke } from "@forge/bridge";
+import React, { useMemo, useState } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -23,91 +22,33 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
     });
   };
 
-  const columns = useMemo(
-    () => [
-      {
-        header: "Issue ID",
-        accessorKey: "id",
-        accessorFn: (row) => row.id?.toString() || "[Invalid ID]",
-        cell: ({ row }) => {
-          const issueKey = row.original.key;
-          const issueId = row.original.id;
-          return (
-            <a
-              onClick={() => getIssueById(issueId)}
-              rel="noopener noreferrer"
-              className="issue-link"
-            >
-              {issueId}
-            </a>
-          );
-        },
-        filterFn: "includesString",
+  const columns = useMemo(() => [
+    {
+      header: 'Issue Key',
+      accessorKey: 'key',
+      filterFn: 'includesString',
+    },
+    {
+      header: 'Summary',
+      accessorFn: row => {
+        const summary = row.fields.summary;
+        return typeof summary === 'string'
+          ? summary
+          : summary?.content?.[0]?.content?.[0]?.text || '[Unsupported Format]';
       },
-      {
-        header: "Project",
-        accessorFn: (row) => row.fields.project?.name || "Unknown Project",
-        cell: ({ row }) => (
-          <span className="project-name">
-            {row.original.fields.project?.name || "Unknown Project"}
-          </span>
-        ),
-        filterFn: "includesString",
-      },
-      {
-        header: "Assignee",
-        accessorFn: (row) =>
-          row.fields.assignee?.displayName || "Unassigned",
-        filterFn: "includesString",
-      },
-      {
-        header: "Status",
-        accessorFn: (row) => row.fields.status?.name || "Unknown Status",
-        filterFn: "includesString",
-      },
-      {
-        header: "Priority",
-        accessorFn: (row) =>
-          row.fields.priority?.name || "No Priority",
-        filterFn: "includesString",
-      },
-      {
-        header: "Summary",
-        accessorFn: (row) => {
-          const summary = row.fields.summary;
-          return typeof summary === "string"
-            ? summary
-            : summary?.content?.[0]?.content?.[0]?.text || "[Unsupported]";
-        },
-        filterFn: "includesString",
-      },
-    ],
-    []
-  );
-
-  const filteredData = useMemo(() => {
-    if (!filters) return data;
-
-    const { selectedOptions } = filters;
-    const selectedIds = selectedOptions?.map((opt) => opt.value);
-
-    return data.filter((issue) =>
-      !selectedIds || selectedIds.length === 0
-        ? true
-        : selectedIds.includes(issue.id)
-    );
-  }, [data, filters]);
-
-  const getIssueById = async (issueId) => {
-    try {
-      const issue = await invoke('getIssueById', { IssueId: issueId });
-      const issuelog = await invoke('getIssueLogById', { IssueId: issueId });
-      console.log('Fetched Issue Log:', issuelog);
-      console.log('Fetched Issue:', issue);
-    } catch (error) {
-      console.error('Error fetching issue by ID:', error);
-    }
-  };
+      filterFn: 'includesString',
+    },
+    {
+      header: 'Status',
+      accessorFn: row => row.fields.status.name,
+      filterFn: 'includesString',
+    },
+    {
+      header: 'Assignee',
+      accessorFn: row => row.fields.assignee?.displayName || 'Unassigned',
+      filterFn: 'includesString',
+    },
+  ], []);
 
   const table = useReactTable({
     data: filteredData,
