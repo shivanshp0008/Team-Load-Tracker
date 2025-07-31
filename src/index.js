@@ -30,9 +30,9 @@ resolver.define('getIssues', async (req) => {
         throw new Error('Failed to fetch issues');
     }
 });
-resolver.define('getIssuesById', async (req) => {
-    const { IssueId } = req.payload;
-    console.log('Received Issue ID:', IssueId);
+
+resolver.define('getIssueById', async (req) => {
+  const { IssueId } = req.payload;
 
     try {
         const response = await api.asApp().requestJira(route
@@ -57,8 +57,5 @@ resolver.define('getIssuesById', async (req) => {
         throw new Error('Failed to fetch issue by ID');
     }
 });
-
-
-
 
 export const handler = resolver.getDefinitions();

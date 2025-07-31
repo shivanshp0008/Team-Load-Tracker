@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { invoke, view } from '@forge/bridge';
 import Home from './components/Home';
-import { Form } from './Form';
+
 
 function App() {
   // const [projectKey, setProjectKey] = useState(null);
@@ -33,7 +33,6 @@ function App() {
   return (
     <>
       <Home data={Array.isArray(allIssues) ? allIssues : []} />
-      <Form/>
     </>
   );
 }

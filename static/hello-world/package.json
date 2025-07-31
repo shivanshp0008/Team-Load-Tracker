@@ -7,8 +7,13 @@
     "@atlaskit/css-reset": "^6.6.2",
     "@forge/bridge": "5.2.0",
     "@tanstack/react-table": "^8.21.3",
+    "date-fns": "^4.1.0",
     "react": "^16",
-    "react-dom": "^16"
+    "react-calendar-heatmap": "^1.10.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^16",
+    "react-heatmap-grid": "^0.9.1",
+    "recharts": "^2.1.9"
   },
   "scripts": {
     "start": "react-scripts start",
