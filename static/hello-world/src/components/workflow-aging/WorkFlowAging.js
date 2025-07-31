@@ -144,7 +144,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
         </div>
       </div>
 
-      <table className="data-table">
+      <table className="data-table ">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
