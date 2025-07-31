@@ -30,6 +30,7 @@
 .data-table {
   border-collapse: collapse;
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .data-table th,
@@ -99,6 +100,7 @@
 
 .form-heading{
   text-align: center;
+   margin-top: 20px;
   margin-bottom: 20px;
   font-size: 1.5rem;
   color: #333;
@@ -256,9 +258,6 @@ input[type="text"],
 }
 
 /* Heat map */
-.color-empty {
-  fill: #eeeeee;
-}
 .color-github-1 {
   fill: #c6e48b;
 }
@@ -270,6 +269,9 @@ input[type="text"],
 }
 .color-github-4 {
   fill: #196127;
+}
+.color-empty {
+  fill: #ebedf0;
 }
 
 .heatmap-container {
@@ -287,6 +289,30 @@ width: 100%;
   width: 10px !important;
   height: 10px !important;
 }
+
+.charts-wrapper {
+  padding: 16px;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 24px;
+}
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-heading {
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
 
 
 
