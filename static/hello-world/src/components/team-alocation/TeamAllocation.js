@@ -16,12 +16,8 @@ const TeamAllocation = ({ data, filters, onBack }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
-<<<<<<< HEAD
-   const [showCharts, setShowCharts] = useState(false);
-=======
     const [showCharts, setShowCharts] = useState(false);
 
->>>>>>> 6cf2dd2318432eccc7b239c9af62d94997a1fdbb
 
 
   const filteredData = useMemo(() => {
@@ -238,23 +234,8 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
-<<<<<<< HEAD
-             <div>
-      {!showCharts ? (
-        <>
-          {/* Your full table logic goes here */}
-          <button className="calculate-btn" onClick={() => setShowCharts(true)}>
-            📊 Calculate
-          </button>
-        </>
-      ) : (
-        <IssueChart data={filteredData} onBack={() => setShowCharts(false)} />
-      )}
-    </div>
-=======
 
       {showCharts && <ChartsDashboard data={filteredData} />}
->>>>>>> 6cf2dd2318432eccc7b239c9af62d94997a1fdbb
     </div>
   );
 };

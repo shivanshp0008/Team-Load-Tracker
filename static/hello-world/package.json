@@ -12,10 +12,7 @@
     "react-calendar-heatmap": "^1.10.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^16",
-<<<<<<< HEAD
     "react-heatmap-grid": "^0.9.1",
-=======
->>>>>>> 6cf2dd2318432eccc7b239c9af62d94997a1fdbb
     "recharts": "^2.1.9"
   },
   "scripts": {

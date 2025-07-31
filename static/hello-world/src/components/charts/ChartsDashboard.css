@@ -1,0 +1,80 @@
+/* .charts-wrapper h3 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #333;
+}
+
+.heatmap-container {
+  max-width: 650px;
+  margin-top: 20px;
+}
+
+.color-empty {
+  fill: #eeeeee;
+} */
+
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 30px;
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.chart-card {
+  background-color: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.8s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.chart-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Heatmap colors */
+.color-empty {
+  fill: #eeeeee;
+}
+.color-github-1 {
+  fill: #c6e48b;
+}
+.color-github-2 {
+  fill: #7bc96f;
+}
+.color-github-3 {
+  fill: #239a3b;
+}
+.color-github-4 {
+  fill: #196127;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-data {
+  padding: 20px;
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
