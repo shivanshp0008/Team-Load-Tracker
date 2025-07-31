@@ -14,6 +14,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
+  const [backlogData, setBacklogData] = useState([]);
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
@@ -116,11 +117,13 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
         }).filter(Boolean).sort((a, b) => new Date(a.created) - new Date(b.created));
 
 
-  if (!statusHistory || statusHistory.length === 0) return console.log([
-    { status: "Backlog", timeSpent: "0d 00h 00m", enteredAt: new Date() }
-  ]) 
+  if (!statusHistory || statusHistory.length === 0){
+    let data = [
+    { status: "Backlog", timeSpent: "0d 00h 00m" }
+  ]
+return setBacklogData(data)
+  }  
   
-
 
 
         
@@ -154,6 +157,8 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
     }
   };
 
+  
+console.log("backlogData:" , backlogData);
 
   const table = useReactTable({
     data: filteredData,
