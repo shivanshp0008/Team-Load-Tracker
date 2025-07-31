@@ -251,6 +251,44 @@ input[type="text"],
   background-color: #125aa5;
 }
 
+.calculate-btn{
+  margin-left: 10px;
+}
+
+/* Heat map */
+.color-empty {
+  fill: #eeeeee;
+}
+.color-github-1 {
+  fill: #c6e48b;
+}
+.color-github-2 {
+  fill: #7bc96f;
+}
+.color-github-3 {
+  fill: #239a3b;
+}
+.color-github-4 {
+  fill: #196127;
+}
+
+.heatmap-container {
+width: 100%;
+ max-Width: 600px;
+}
+
+.react-calendar-heatmap text {
+  font-size: 8px; /* Shrink label text */
+}
+
+.react-calendar-heatmap rect {
+  rx: 2px;
+  ry: 2px;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+
 
 /* For tablets and smaller laptops */
 @media (max-width: 1024px) {

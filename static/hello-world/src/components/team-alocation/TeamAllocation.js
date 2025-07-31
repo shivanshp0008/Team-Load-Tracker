@@ -7,12 +7,15 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import ChartsDashboard from '../charts/ChartsDashboard';
 
 const TeamAllocation = ({ data, filters, onBack }) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
+    const [showCharts, setShowCharts] = useState(false);
+
 
 
   const filteredData = useMemo(() => {
@@ -44,6 +47,11 @@ const TeamAllocation = ({ data, filters, onBack }) => {
 
   const columns = useMemo(
     () => [
+      {
+        header: 'Sr. No.',
+        accessorKey: 'srNo',
+        cell: ({ row }) => row.index + 1,
+      },
       {
         header: 'Issue ID',
         accessorKey: 'id',
@@ -155,6 +163,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           <button onClick={onBack} className="back-btn">
             ← Back to Form
           </button>
+          <button onClick={() => setShowCharts(true)} className="calculate-btn">Calculate</button>
         </div>
         <div>
           <input
@@ -222,6 +231,8 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
+
+      {showCharts && <ChartsDashboard data={filteredData} />}
     </div>
   );
 };

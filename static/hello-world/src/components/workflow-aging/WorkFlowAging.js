@@ -8,11 +8,13 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 
+
 const WorkFlowAging = ({ data, filters, onBack }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
+
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
@@ -212,6 +214,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
+
     </div>
   );
 };
