@@ -8,6 +8,7 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import ChartsDashboard from '../charts/ChartsDashboard';
 
 
 const TeamAllocation = ({ data, filters, onBack }) => {
@@ -15,7 +16,12 @@ const TeamAllocation = ({ data, filters, onBack }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
+<<<<<<< HEAD
    const [showCharts, setShowCharts] = useState(false);
+=======
+    const [showCharts, setShowCharts] = useState(false);
+
+>>>>>>> 6cf2dd2318432eccc7b239c9af62d94997a1fdbb
 
 
   const filteredData = useMemo(() => {
@@ -47,6 +53,11 @@ const TeamAllocation = ({ data, filters, onBack }) => {
 
   const columns = useMemo(
     () => [
+      {
+        header: 'Sr. No.',
+        accessorKey: 'srNo',
+        cell: ({ row }) => row.index + 1,
+      },
       {
         header: 'Issue ID',
         accessorKey: 'id',
@@ -158,6 +169,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           <button onClick={onBack} className="back-btn">
             ← Back to Form
           </button>
+          <button onClick={() => setShowCharts(true)} className="calculate-btn">Calculate</button>
         </div>
   
         <div>
@@ -226,6 +238,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
+<<<<<<< HEAD
              <div>
       {!showCharts ? (
         <>
@@ -238,6 +251,10 @@ const TeamAllocation = ({ data, filters, onBack }) => {
         <IssueChart data={filteredData} onBack={() => setShowCharts(false)} />
       )}
     </div>
+=======
+
+      {showCharts && <ChartsDashboard data={filteredData} />}
+>>>>>>> 6cf2dd2318432eccc7b239c9af62d94997a1fdbb
     </div>
   );
 };
