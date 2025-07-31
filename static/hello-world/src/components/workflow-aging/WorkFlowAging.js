@@ -106,37 +106,49 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
       console.log('Fetched Issue:', issue);
 
 
-      const statusHistory = issuelog.values
-        .map((log) => {
+      const statusHistory = issuelog.values.map((log) => {
           const statusChange = log.items.find(item => item.field === 'status');
           if (!statusChange) return null;
           return {
             status: statusChange.toString || statusChange.to || 'Unknown',
             created: log.created,
           };
-        })
-        .filter(Boolean)
-        .sort((a, b) => new Date(a.created) - new Date(b.created));
+        }).filter(Boolean).sort((a, b) => new Date(a.created) - new Date(b.created));
 
-      const statusWithDurations = statusHistory.map((entry, index) => {
-        const currentTime = new Date(entry.created);
-        const nextTime = statusHistory[index + 1]
-          ? new Date(statusHistory[index + 1].created)
-          : new Date();
 
-        const diffInSeconds = Math.floor((nextTime - currentTime) / 1000);
-        const days = Math.floor(diffInSeconds / 86400);
-        const hours = Math.floor((diffInSeconds % 86400) / 3600);
-        const minutes = Math.floor((diffInSeconds % 3600) / 60);
+  if (!statusHistory || statusHistory.length === 0) return console.log([
+    { status: "Backlog", timeSpent: "0d 00h 00m", enteredAt: new Date() }
+  ]) 
+  
 
-        return {
-          status: entry.status,
-          enteredAt: entry.created,
-          timeSpent: `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`
-        };
-      });
+
+
+        
+
+    const statusWithDurations = statusHistory.map((entry, index) => {
+      if(!entry.status) return null;
+  const currentTime = new Date(entry.created);
+  const nextTime = statusHistory[index + 1]
+    ? new Date(statusHistory[index + 1].created)
+    : new Date(); // if last status, use current time
+
+  const diffInSeconds = Math.floor((nextTime - currentTime) / 1000);
+  const days = Math.floor(diffInSeconds / 86400);
+  const hours = Math.floor((diffInSeconds % 86400) / 3600);
+  const minutes = Math.floor((diffInSeconds % 3600) / 60);
+
+  return {
+    status: entry.status || "Unknown",
+    enteredAt: entry.created,
+    timeSpent: `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`
+  };
+});
+
 
       console.log('Status Time Breakdown:', statusWithDurations);
+
+
+      
     } catch (error) {
       console.error('Error fetching issue by ID:', error);
     }
