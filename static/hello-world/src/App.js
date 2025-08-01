@@ -33,6 +33,7 @@ function App() {
   return (
     <>
       <Home data={Array.isArray(allIssues) ? allIssues : []} />
+      
     </>
   );
 }

@@ -18,7 +18,11 @@ permissions:
   external:
     fetch:
       backend:
-        - address: "*.atlassian.net"
+        - "*.atlassian.net"
+  content:
+    styles:
+      - 'unsafe-inline'
+
 app:
   runtime:
     name: nodejs22.x

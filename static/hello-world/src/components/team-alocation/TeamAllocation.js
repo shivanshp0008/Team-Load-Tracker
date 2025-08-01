@@ -235,7 +235,15 @@ const TeamAllocation = ({ data, filters, onBack }) => {
         </tbody>
       </table>
 
-      {showCharts && <ChartsDashboard data={filteredData} />}
+{showCharts && (
+  <ChartsDashboard
+    data={filteredData}
+    showPieChart={true}
+    showLineChart={true}
+    showHeatmap={true}
+  />
+)}
+
     </div>
   );
 };

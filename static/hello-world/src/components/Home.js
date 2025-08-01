@@ -1,8 +1,10 @@
 import { useState } from "react";
 import TeamAlocation from "./team-alocation/TeamAllocation";
 import WorkFlowAging from "./workflow-aging/WorkFlowAging";
-import WorkFlowForm from "./workflow-aging/WorkFlowForm";
 import TeamAllocationForm from "./team-alocation/TeamAllocationForm";
+import WorkFlowForm from "./workflow-aging/WorkFlowForm";
+// import WorkFlowForm from "./workflow-aging/WorkFlowForm";
+// import TeamAllocationForm from "./team-alocation/TeamAllocationForm";
 
 const Home = ({ data }) => {
   const [activeTab, setActiveTab] = useState("team");

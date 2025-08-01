@@ -7,14 +7,13 @@ import {
   getSortedRowModel,
   flexRender,
 } from "@tanstack/react-table";
-
+import ChartsDashboard from "../charts/ChartsDashboard";
 
 const WorkFlowAging = ({ data, filters, onBack }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
-
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
@@ -25,6 +24,11 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
 
   const columns = useMemo(
     () => [
+      {
+        header: "Sr. No.",
+        accessorKey: "srNo",
+        cell: ({ row }) => row.index + 1,
+      },
       {
         header: "Issue ID",
         accessorKey: "id",
@@ -56,8 +60,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
       },
       {
         header: "Assignee",
-        accessorFn: (row) =>
-          row.fields.assignee?.displayName || "Unassigned",
+        accessorFn: (row) => row.fields.assignee?.displayName || "Unassigned",
         filterFn: "includesString",
       },
       {
@@ -67,8 +70,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
       },
       {
         header: "Priority",
-        accessorFn: (row) =>
-          row.fields.priority?.name || "No Priority",
+        accessorFn: (row) => row.fields.priority?.name || "No Priority",
         filterFn: "includesString",
       },
       {
@@ -100,12 +102,12 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
 
   const getIssueById = async (issueId) => {
     try {
-      const issue = await invoke('getIssueById', { IssueId: issueId });
-      const issuelog = await invoke('getIssueLogById', { IssueId: issueId });
-      console.log('Fetched Issue Log:', issuelog);
-      console.log('Fetched Issue:', issue);
+      const issue = await invoke("getIssueById", { IssueId: issueId });
+      const issuelog = await invoke("getIssueLogById", { IssueId: issueId });
+      console.log("Fetched Issue Log:", issuelog);
+      console.log("Fetched Issue:", issue);
     } catch (error) {
-      console.error('Error fetching issue by ID:', error);
+      console.error("Error fetching issue by ID:", error);
     }
   };
 
@@ -144,7 +146,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
         </div>
       </div>
 
-      <table className="data-table ">
+      <table className="data-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -215,6 +217,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
         </tbody>
       </table>
 
+      <ChartsDashboard data={filteredData} showTeamCharts showPieChart={false} showLineChart={false} showHeatmap={false}/>
     </div>
   );
 };
