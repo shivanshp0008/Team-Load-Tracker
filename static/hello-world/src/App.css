@@ -1,0 +1,378 @@
+.column-filter {
+  margin-top: 4px;
+  padding: 4px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.table-wrapper {
+  padding: 1rem;
+  overflow-x: auto;
+}
+.filter-container{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.table-search {
+ padding: 8px;
+  width: 25%;
+  min-width: 150px;
+  max-width: 100%;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  transition: width 0.2s ease;
+}
+
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  /* margin-bottom: 50px; */
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ccc;
+  padding: 10px !important;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+}
+
+.filter-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 5px;
+  padding: 0;
+}
+
+.filter-toggle-btn.active {
+  color: #0052cc; /* or any color to highlight the active one */
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+
+.search-container{
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+}
+
+/* Tab  */
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.tab-buttons .active-tab {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-buttons .inactive-tab {
+  background-color: #f0f0f0;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.form-heading{
+  text-align: center;
+   margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* workflow aging form */
+.teamallocation-form, .workflow-form {
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+
+
+label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.workflow-form {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+    cursor: pointer;
+}
+
+input[type="date"],
+input[type="text"],
+.select-display {
+  padding: 10px;
+    cursor: pointer;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box; /* ✅ Ensures padding doesn’t exceed width */
+}
+
+.custom-datepicker {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+
+.custom-select-container {
+  position: relative;
+}
+
+.select-display {
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+  background: white;
+}
+
+.placeholder {
+  color: #888;
+}
+
+.chip {
+  background: #1976d2;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 20px;
+  margin: 2px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.chip button {
+  margin-left: 6px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  padding-left: 8px;
+}
+
+.options-dropdown {
+  position: absolute;
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid #aaa;
+  background: white;
+  border-radius: 6px;
+  margin-top: 2px;
+  z-index: 999;
+}
+
+.dropdown-option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-option.selected {
+  background-color: #cde1ff;
+  font-weight: bold;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.submit-btn {
+  background-color: #1976d2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #125aa5;
+}
+
+.calculate-btn{
+  margin-left: 10px;
+}
+
+/* Heat map */
+.color-github-1 {
+  fill: #c6e48b;
+}
+.color-github-2 {
+  fill: #7bc96f;
+}
+.color-github-3 {
+  fill: #239a3b;
+}
+.color-github-4 {
+  fill: #196127;
+}
+.color-empty {
+  fill: #ebedf0;
+}
+
+.heatmap-container {
+width: 100%;
+ max-Width: 600px;
+}
+
+.react-calendar-heatmap text {
+  font-size: 8px; /* Shrink label text */
+}
+
+.react-calendar-heatmap rect {
+  rx: 2px;
+  ry: 2px;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.charts-wrapper {
+  padding: 16px;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 24px;
+}
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-heading {
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+
+
+
+/* For tablets and smaller laptops */
+@media (max-width: 1024px) {
+  .table-search {
+    width: 40%;
+  }
+}
+
+/* For mobile screens */
+@media (max-width: 600px) {
+  .table-search {
+    width: 90%;
+  }
+   .workflow-form {
+    padding: 15px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}
+
+/* .table-wrapper {
+  overflow: auto; 
+} */
+
+.pagination-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-controls button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #0052cc;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+.dashboard-overview {
+  background-color: #f4f5f7;
+  padding: 16px;
+  border-radius: 8px;
+}
+.dashboard-item {
+  background: white;
+  padding: 12px;
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.1);
+}
