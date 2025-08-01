@@ -3,10 +3,10 @@ import api, { route } from '@forge/api';
 
 
 const resolver = new Resolver();
-resolver.define('getProjectKey', async (req) => {
-    const { projectKey } = req.payload;
-    console.log('Received project key:', projectKey);
-});
+// resolver.define('getProjectKey', async (req) => {
+//     const { projectKey } = req.payload;
+//     console.log('Received project key:', projectKey);
+// });
 
 
 resolver.define('getIssues', async (req) => {
@@ -23,7 +23,7 @@ resolver.define('getIssues', async (req) => {
         );
 
         const data = await response.json();
-        // console.log('Issues fetched:', data);
+        console.log('Issues fetched:', data);
         return data.issues || [];
     } catch (error) {
         console.error('Error fetching issues:', error);

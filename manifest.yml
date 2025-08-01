@@ -18,10 +18,10 @@ permissions:
   external:
     fetch:
       backend:
-        - "*.atlassian.net"
+        - address: "*.atlassian.net"
   content:
     styles:
-      - 'unsafe-inline'
+      - unsafe-inline
 
 app:
   runtime:
