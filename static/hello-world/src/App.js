@@ -3,7 +3,6 @@ import { invoke, view } from '@forge/bridge';
 import Home from './components/Home';
 
 function App() {
-  // const [projectKey, setProjectKey] = useState(null);
   const [allIssues, setAllIssues] = useState([]);
 
   useEffect(() => {
@@ -12,9 +11,6 @@ function App() {
       const key = context?.extension?.project?.key;
       console.log('Forge Context:', context);
       console.log('Project Key:', key);
-
-      // setProjectKey(key);
-      // await invoke('getProjectKey', { projectKey: key });
 
       try {
         const issues = await invoke('getIssues', { projectKey: key });
@@ -29,9 +25,7 @@ function App() {
   }, []);
 
   console.log('Fetched Issues:', allIssues);
-
   
-
   return (
     <>
       <Home data={Array.isArray(allIssues) ? allIssues : []} />
