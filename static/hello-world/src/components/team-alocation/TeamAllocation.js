@@ -207,24 +207,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
   };
 
   return (
-    <div className="table-wrapper">
-      {/* <div className="search-container">
-        <div className="table-header">
-          <button onClick={onBack} className="back-btn">
-            ← Back to Form
-          </button>
-          <button onClick={() => setShowCharts(true)} className="calculate-btn">Calculate</button>
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Global search..."
-            value={globalFilter ?? ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="table-search"
-          />
-        </div>
-      </div> */}
+    <div className="container">
 
       {/* /////////////// dashboard ////////////////// */}
 
@@ -252,15 +235,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
             })()
           }
         </div>
-        {/* <div className="dashboard-item">
-          <strong>Average % Done:</strong> {
-            (() => {
-              const percents = filteredData.map(item => item.fields.aggregateprogress?.percent).filter(p => typeof p === 'number');
-              const avg = percents.length > 0 ? percents.reduce((a, b) => a + b, 0) / percents.length : 0;
-              return `${avg.toFixed(1)}%`;
-            })()
-          }
-        </div> */}
         <div className="dashboard-item">
           <strong>Issues in Backlog:</strong> {
             filteredData.filter(item => item.fields.status?.name?.toLowerCase() === 'backlog').length
@@ -281,7 +255,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
       </div>
 
       {/* /////////////// Table //////////////////// */}
-
+      <div className="table-wrapper">
       <table className="data-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -345,6 +319,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
+      </div>
       <div className="pagination-controls">
         <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           ← Prev

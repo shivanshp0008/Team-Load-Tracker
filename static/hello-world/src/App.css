@@ -1,15 +1,22 @@
 .column-filter {
-  margin-top: 4px;
-  padding: 4px;
-  font-size: 0.85rem;
+  margin-top: 2px !important;
+  padding: 4px !important;
+  font-size: 12px !important;
   border-radius: 4px;
   border: 1px solid #ccc;
 }
 
 .table-wrapper {
-  padding: 1rem;
+  width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
 }
+
+.container{
+  margin: 0;
+  padding: 0;
+}
+
 .filter-container{
   display: flex;
   align-items: center;
@@ -30,6 +37,7 @@
 .data-table {
   border-collapse: collapse;
   width: 100%;
+  table-layout: auto;
   /* margin-bottom: 50px; */
 }
 
@@ -39,10 +47,17 @@
   padding: 10px !important;
   text-align: left;
   vertical-align: top;
+  white-space: nowrap; 
 }
 
 .data-table th {
   background-color: #f2f2f2;
+  font-weight: 600;
+  border-bottom: 2px solid #dfe1e6;
+}
+
+.data-table td {
+  border-bottom: 1px solid #e1e4e8;
 }
 
 .filter-toggle-btn {
@@ -50,8 +65,8 @@
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  margin-left: 5px;
-  padding: 0;
+  /* margin-left: 5px; */
+  padding: 0 4px;
 }
 
 .filter-toggle-btn.active {

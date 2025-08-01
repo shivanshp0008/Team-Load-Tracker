@@ -5,13 +5,16 @@ const WorkFlowForm = ({ data, onSubmit }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [errors, setErrors] = useState({});
 
+  console.log("data",data)
+
   const assigneeOptions = useMemo(() => {
     const uniqueMap = new Map();
     data.forEach(issue => {
       const issueName = issue.fields?.summary;
-      if (issueName && !uniqueMap.has(issueName)) {
-        uniqueMap.set(issueName, {
-          label: issueName,
+      const key = issue.key;
+      if (issueName && key && !uniqueMap.has(key)) {
+        uniqueMap.set(key, {
+          label: `${key} ${issueName}`,
           value: issue.id
         });
       }
