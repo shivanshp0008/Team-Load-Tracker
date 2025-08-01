@@ -19,7 +19,7 @@ import {
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { subDays, format } from "date-fns";
-import "./ChartsDashboard.css"; // <-- External stylesheet
+import "./ChartsDashboard.css"; // Custom styles
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#a4de6c", "#00C49F", "#FFBB28"];
 
@@ -83,8 +83,6 @@ const ChartsDashboard = ({
     count: 1,
   }));
 
-  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#a4de6c"];
-
   return (
     <div className="charts-wrapper">
       <div className="chart-grid">
@@ -98,13 +96,16 @@ const ChartsDashboard = ({
                   dataKey="value"
                   nameKey="name"
                   outerRadius={100}
+                  isAnimationActive={true}
+                  animationDuration={1200}
+                  animationEasing="ease-out"
                   label={({ name, value }) => `${name}: ${value}`}
                 >
                   {statusData.map((entry, index) => (
                     <Cell key={index} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={(value, name) => [`${value} issues`, name]} />
                 <Legend layout="horizontal" verticalAlign="bottom" align="center" />
               </PieChart>
             </ResponsiveContainer>
@@ -119,7 +120,14 @@ const ChartsDashboard = ({
                 <XAxis dataKey="index" />
                 <YAxis />
                 <CartesianGrid strokeDasharray="3 3" />
-                <Line type="monotone" dataKey="index" stroke="#8884d8" />
+                <Line
+                  type="monotone"
+                  dataKey="index"
+        
+                  stroke="#8884d8"
+                  isAnimationActive={true}
+                  animationDuration={1200}
+                />
                 <Tooltip />
               </LineChart>
             </ResponsiveContainer>
@@ -166,6 +174,8 @@ const ChartsDashboard = ({
                       stackId="a"
                       barSize={40}
                       fill={COLORS[idx % COLORS.length]}
+                      isAnimationActive={true}
+                      animationDuration={1000}
                     />
                   ))}
                 </BarChart>
@@ -180,7 +190,13 @@ const ChartsDashboard = ({
                   <XAxis type="number" />
                   <YAxis type="category" dataKey="name" />
                   <Tooltip />
-                  <Bar dataKey="count" fill="#8884d8" barSize={40} />
+                  <Bar
+                    dataKey="count"
+                    fill="#8884d8"
+                    barSize={40}
+                    isAnimationActive={true}
+                    animationDuration={1000}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
