@@ -12,7 +12,6 @@ import dayjs from 'dayjs';
 import ChartsDashboard from '../charts/ChartsDashboard';
 import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
-import { getPaginationRowModel } from '@tanstack/react-table';
 import DashboardSummary from '../summary/DashboardSummary';
 
 
@@ -184,8 +183,11 @@ const TeamAllocation = ({ data, filters, onBack }) => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span onClick={header.column.getToggleSortingHandler()} style={{ cursor: 'pointer' }}>
+                  <div>
+                    <span
+                      onClick={header.column.getToggleSortingHandler()}
+                      style={{ cursor: 'pointer' }}
+                    >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       <span className="sort-icon">
                         {header.column.getIsSorted() === 'asc' ? <ArrowUpIcon size="small" /> :

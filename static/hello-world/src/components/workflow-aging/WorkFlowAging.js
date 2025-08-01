@@ -7,14 +7,16 @@ import {
   getSortedRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import ChartsDashboard from "../charts/ChartsDashboard";
+import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
+import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
+import StatusTimelineChart from "./StatusTimelineChart";
 
 const WorkFlowAging = ({ data, filters, onBack }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
-  const [backlogData, setBacklogData] = useState([]);
+  const [selectedIssueData, setSelectedIssueData] = useState([]);
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
@@ -45,23 +47,13 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
         filterFn: "includesString",
       },
       {
-        header: "Project",
-        accessorFn: (row) => row.fields.project?.name || "Unknown Project",
-        cell: ({ row }) => (
-          <span className="project-name">
-            {row.original.fields.project?.name || "Unknown Project"}
-          </span>
-        ),
-        filterFn: "includesString",
-      },
-      {
-        header: "Assignee",
+        header: "Current Assignee",
         accessorFn: (row) =>
           row.fields.assignee?.displayName || "Unassigned",
         filterFn: "includesString",
       },
       {
-        header: "Status",
+        header: "Current Status",
         accessorFn: (row) => row.fields.status?.name || "Unknown Status",
         filterFn: "includesString",
       },
@@ -99,66 +91,63 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
   }, [data, filters]);
 
 
-  const getIssueById = async (issueId) => {
-    try {
-      const issue = await invoke('getIssueById', { IssueId: issueId });
-      const issuelog = await invoke('getIssueLogById', { IssueId: issueId });
-      console.log('Fetched Issue Log:', issuelog);
-      console.log('Fetched Issue:', issue);
+const getIssueById = async (issueId) => {
+  try {
+    const issue = await invoke('getIssueById', { IssueId: issueId });
+    const issuelog = await invoke('getIssueLogById', { IssueId: issueId });
 
+    const assignee = issue.fields.assignee?.displayName || "Unassigned";
 
-      const statusHistory = issuelog.values.map((log) => {
-          const statusChange = log.items.find(item => item.field === 'status');
-          if (!statusChange) return null;
-          return {
-            status: statusChange.toString || statusChange.to || 'Unknown',
-            created: log.created,
-          };
-        }).filter(Boolean).sort((a, b) => new Date(a.created) - new Date(b.created));
+    const statusHistory = issuelog.values
+      .map((log) => {
+        const statusChange = log.items.find(item => item.field === 'status');
+        if (!statusChange) return null;
+        return {
+          status: statusChange.toString || statusChange.to || 'Unknown',
+          created: log.created,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => new Date(a.created) - new Date(b.created));
 
+    if (!statusHistory || statusHistory.length === 0) {
+      setSelectedIssueData([{
+        status: "Backlog",
+        enteredAt: new Date().toISOString(),
+        timeSpent: "0d 00h 00m",
+        assignee
+      }]);
+      return;
+    }
 
-  if (!statusHistory || statusHistory.length === 0){
-    let data = [
-    { status: "Backlog", timeSpent: "0d 00h 00m" }
-  ]
-return setBacklogData(data)
-  }  
-  
-
-
-        
+    const now = new Date();
 
     const statusWithDurations = statusHistory.map((entry, index) => {
-      if(!entry.status) return null;
-  const currentTime = new Date(entry.created);
-  const nextTime = statusHistory[index + 1]
-    ? new Date(statusHistory[index + 1].created)
-    : new Date(); // if last status, use current time
+      const currentTime = new Date(entry.created);
+      const nextTime = statusHistory[index + 1]
+        ? new Date(statusHistory[index + 1].created)
+        : now;
 
-  const diffInSeconds = Math.floor((nextTime - currentTime) / 1000);
-  const days = Math.floor(diffInSeconds / 86400);
-  const hours = Math.floor((diffInSeconds % 86400) / 3600);
-  const minutes = Math.floor((diffInSeconds % 3600) / 60);
+      const diffInSeconds = Math.floor((nextTime - currentTime) / 1000);
+      const days = Math.floor(diffInSeconds / 86400);
+      const hours = Math.floor((diffInSeconds % 86400) / 3600);
+      const minutes = Math.floor((diffInSeconds % 3600) / 60);
 
-  return {
-    status: entry.status || "Unknown",
-    enteredAt: entry.created,
-    timeSpent: `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`
-  };
-});
+      return {
+        status: entry.status || "Unknown",
+        enteredAt: entry.created,
+        timeSpent: `${days}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`,
+        assignee
+      };
+    });
 
+    setSelectedIssueData(statusWithDurations);
 
-      console.log('Status Time Breakdown:', statusWithDurations);
+  } catch (error) {
+    console.error('Error fetching issue by ID:', error);
+  }
+};
 
-
-      
-    } catch (error) {
-      console.error('Error fetching issue by ID:', error);
-    }
-  };
-
-  
-console.log("backlogData:" , backlogData);
 
   const table = useReactTable({
     data: filteredData,
@@ -178,36 +167,15 @@ console.log("backlogData:" , backlogData);
 
   return (
     <div className="table-wrapper">
-      <div className="search-container">
-        <div className="table-header">
-          <button onClick={onBack} className="back-btn">
-            ← Back to Form
-          </button>
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Global search..."
-            value={globalFilter ?? ""}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="table-search"
-          />
-        </div>
-      </div>
-
+      
+      <div className="table-wrapper">
       <table className="data-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
+                  <div>
                     <span
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: "pointer" }}
@@ -217,11 +185,13 @@ console.log("backlogData:" , backlogData);
                         header.getContext()
                       )}
                       <span className="sort-icon">
-                        {header.column.getIsSorted() === "asc"
-                          ? "🔼"
-                          : header.column.getIsSorted() === "desc"
-                            ? "🔽"
-                            : "🔼"}
+                        {header.column.getIsSorted() === 'asc' ? (
+                          <ArrowUpIcon label="Sorted ascending" size="small" />
+                        ) : header.column.getIsSorted() === 'desc' ? (
+                          <ArrowDownIcon label="Sorted descending" size="small" />
+                        ) : (
+                          <ArrowUpIcon label="Unsorted" size="small" />
+                        )}
                       </span>
                     </span>
                     {header.column.getCanFilter() && (
@@ -230,7 +200,8 @@ console.log("backlogData:" , backlogData);
                         className={`filter-toggle-btn ${visibleFilters[header.column.id] ? "active" : ""
                           }`}
                       >
-                        ☰
+                        {/* ☰ */}
+                         &#8942;
                       </button>
                     )}
                   </div>
@@ -264,8 +235,12 @@ console.log("backlogData:" , backlogData);
           ))}
         </tbody>
       </table>
+      </div>
 
-      <ChartsDashboard data={filteredData} showTeamCharts showPieChart={false} showLineChart={false} showHeatmap={false}/>
+      {selectedIssueData?.length > 0 && (
+    <StatusTimelineChart statusData={selectedIssueData} />
+)}
+
     </div>
   );
 };
