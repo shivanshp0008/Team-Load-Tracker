@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { invoke } from '@forge/bridge';
 import {
   useReactTable,
@@ -7,15 +7,24 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import ChartsDashboard from '../charts/ChartsDashboard';
+import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
+import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
+import { getPaginationRowModel } from '@tanstack/react-table';
+import Select from '@atlaskit/select';
+
 
 const TeamAllocation = ({ data, filters, onBack }) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
-    const [showCharts, setShowCharts] = useState(false);
-
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 5,
+  });
+  const [selectedUser, setSelectedUser] = useState(null);
 
 
   const filteredData = useMemo(() => {
@@ -36,22 +45,47 @@ const TeamAllocation = ({ data, filters, onBack }) => {
       const matchDate =
         fromDate && toDate
           ? new Date(created) >= new Date(fromDate) &&
-            new Date(created) <= new Date(toDate)
+          new Date(created) <= new Date(toDate)
           : true;
 
       return matchAssignee && matchDate;
     });
   }, [data, filters]);
 
+  useEffect(() => {
+    console.log("filteredData", filteredData)
+  }, [filters])
+
+  const userOptions = useMemo(() => {
+    const names = Array.from(
+      new Set(filteredData.map((item) => item.fields.assignee?.displayName || "Unassigned"))
+    );
+    return [{ label: "All", value: null }, ...names.map((n) => ({ label: n, value: n }))];
+  }, [filteredData]);
+
+  const analyzedData = useMemo(() => {
+    if (!selectedUser) return filteredData;
+    return filteredData.filter(
+      (item) => (item.fields.assignee?.displayName || "Unassigned") === selectedUser
+    );
+  }, [filteredData, selectedUser]);
+
+  const formatSecondsToHrMin = (seconds) => {
+    if (seconds == null) return 'N/A';
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.round((seconds % 3600) / 60);
+    return `${hours}h ${minutes}m`;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return dayjs(dateString).format('DD MMM YYYY');
+  };
+
 
 
   const columns = useMemo(
     () => [
-      {
-        header: 'Sr. No.',
-        accessorKey: 'srNo',
-        cell: ({ row }) => row.index + 1,
-      },
       {
         header: 'Issue ID',
         accessorKey: 'id',
@@ -73,11 +107,11 @@ const TeamAllocation = ({ data, filters, onBack }) => {
         filterFn: 'includesString',
       },
       {
-        header: 'Project',
-        accessorFn: (row) => row.fields.project?.name || 'Unknown Project',
+        header: 'Issue Type',
+        accessorFn: (row) => row.fields.issuetype?.name || 'Unknown Type',
         cell: ({ row }) => {
-          const projectName = row.original.fields.project?.name;
-          return <span className="project-name">{projectName || 'Unknown Project'}</span>;
+          const issueType = row.original.fields.issuetype?.name;
+          return <span className="issue-type">{issueType || 'Unknown Type'}</span>;
         },
         filterFn: 'includesString',
       },
@@ -96,29 +130,42 @@ const TeamAllocation = ({ data, filters, onBack }) => {
         accessorFn: (row) => row.fields.priority?.name || 'No Priority',
         filterFn: 'includesString',
       },
-      {
-        header: 'Summary',
-        accessorFn: (row) => {
-          const summary = row.fields.summary;
-          return typeof summary === 'string'
-            ? summary
-            : summary?.content?.[0]?.content?.[0]?.text || '[Unsupported Format]';
-        },
-        filterFn: 'includesString',
-      },
+      // {
+      //   header: 'Summary',
+      //   accessorFn: (row) => {
+      //     const summary = row.fields.summary;
+      //     return typeof summary === 'string'
+      //       ? summary
+      //       : summary?.content?.[0]?.content?.[0]?.text || '[Unsupported Format]';
+      //   },
+      //   filterFn: 'includesString',
+      // },
       {
         header: 'ETA',
-        accessorFn: (row) => row.fields.duedate || 'N/A',
+        accessorFn: (row) => formatSecondsToHrMin(row.fields.timeoriginalestimate),
       },
       {
         header: 'TS',
+        accessorFn: (row) => formatSecondsToHrMin(row.fields.timespent),
       },
       {
         header: 'TR',
+        accessorFn: (row) => formatSecondsToHrMin(row.fields.timeestimate),
       },
       {
-        header: 'ACD',
+        header: 'Due Date',
+        accessorFn: (row) => formatDate(row.fields.duedate),
       },
+      {
+        header: '% Done',
+        accessorFn: (row) =>
+          row.fields.aggregateprogress?.percent != null
+            ? `${row.fields.aggregateprogress.percent}%`
+            : 'N/A',
+      },
+      // {
+      //   header: 'ACD',
+      // },
     ],
     []
   );
@@ -130,16 +177,19 @@ const TeamAllocation = ({ data, filters, onBack }) => {
       globalFilter,
       sorting,
       columnFilters,
+      pagination,
     },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
-  
+
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
       const isVisible = prev[columnId];
@@ -147,7 +197,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
     });
   };
 
-    const getIssueById = async (issueId) => {
+  const getIssueById = async (issueId) => {
     try {
       const issue = await invoke('getIssueById', { IssueId: issueId });
       console.log('Fetched Issue:', issue);
@@ -158,7 +208,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
 
   return (
     <div className="table-wrapper">
-      <div className="search-container">
+      {/* <div className="search-container">
         <div className="table-header">
           <button onClick={onBack} className="back-btn">
             ← Back to Form
@@ -174,7 +224,63 @@ const TeamAllocation = ({ data, filters, onBack }) => {
             className="table-search"
           />
         </div>
+      </div> */}
+
+      {/* /////////////// dashboard ////////////////// */}
+
+      <div className="dashboard-overview" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
+        <div className="dashboard-item">
+          <strong>Total Issues:</strong> {filteredData.length}
+        </div>
+        <div className="dashboard-item">
+          <strong>Unassigned Issues:</strong> {filteredData.filter(item => !item.fields.assignee).length}
+        </div>
+        <div className="dashboard-item">
+          <strong>Average ETA:</strong> {
+            (() => {
+              const etas = filteredData.map(item => item.fields.timeoriginalestimate).filter(Boolean);
+              const avgEta = etas.length > 0 ? etas.reduce((a, b) => a + b, 0) / etas.length : 0;
+              return formatSecondsToHrMin(avgEta);
+            })()
+          }
+        </div>
+        <div className="dashboard-item">
+          <strong>Total Time Spent:</strong> {
+            (() => {
+              const total = filteredData.map(item => item.fields.timespent).filter(Boolean).reduce((a, b) => a + b, 0);
+              return formatSecondsToHrMin(total);
+            })()
+          }
+        </div>
+        {/* <div className="dashboard-item">
+          <strong>Average % Done:</strong> {
+            (() => {
+              const percents = filteredData.map(item => item.fields.aggregateprogress?.percent).filter(p => typeof p === 'number');
+              const avg = percents.length > 0 ? percents.reduce((a, b) => a + b, 0) / percents.length : 0;
+              return `${avg.toFixed(1)}%`;
+            })()
+          }
+        </div> */}
+        <div className="dashboard-item">
+          <strong>Issues in Backlog:</strong> {
+            filteredData.filter(item => item.fields.status?.name?.toLowerCase() === 'backlog').length
+          }
+        </div>
+        <div className="dashboard-item">
+          <strong>Overdue Issues:</strong> {
+            (() => {
+              const today = new Date();
+              return filteredData.filter(item => {
+                const dueDate = item.fields.duedate ? new Date(item.fields.duedate) : null;
+                const status = item.fields.status?.name?.toLowerCase();
+                return dueDate && dueDate < today && status !== 'done';
+              }).length;
+            })()
+          }
+        </div>
       </div>
+
+      {/* /////////////// Table //////////////////// */}
 
       <table className="data-table">
         <thead>
@@ -189,11 +295,18 @@ const TeamAllocation = ({ data, filters, onBack }) => {
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       <span className="sort-icon">
-                        {header.column.getIsSorted() === 'asc'
+                        {/* {header.column.getIsSorted() === 'asc'
                           ? '🔼'
                           : header.column.getIsSorted() === 'desc'
                           ? '🔽'
-                          : '🔼'}
+                          : '🔼'} */}
+                        {header.column.getIsSorted() === 'asc' ? (
+                          <ArrowUpIcon label="Sorted ascending" size="small" />
+                        ) : header.column.getIsSorted() === 'desc' ? (
+                          <ArrowDownIcon label="Sorted descending" size="small" />
+                        ) : (
+                          <ArrowUpIcon label="Unsorted" size="small" />
+                        )}
                       </span>
                     </span>
                     {header.column.getCanFilter() && (
@@ -201,7 +314,8 @@ const TeamAllocation = ({ data, filters, onBack }) => {
                         onClick={() => toggleFilter(header.column.id)}
                         className={`filter-toggle-btn ${visibleFilters[header.column.id] ? 'active' : ''}`}
                       >
-                        ☰
+                        {/* ☰ */}
+                        &#8942;
                       </button>
                     )}
                   </div>
@@ -231,15 +345,31 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
+      <div className="pagination-controls">
+        <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          ← Prev
+        </button>
+        <span>
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+        </span>
+        <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          Next →
+        </button>
+      </div>
 
-{showCharts && (
-  <ChartsDashboard
-    data={filteredData}
-    showPieChart={true}
-    showLineChart={true}
-    showHeatmap={true}
-  />
-)}
+      {/* //////////////// Charts ////////////////////// */}
+
+      <div style={{ marginBottom: "1rem", width: "300px" }}>
+        <Select
+          options={userOptions}
+          placeholder="Select Team Member"
+          onChange={(e) => setSelectedUser(e.value)}
+          defaultValue={userOptions[0]}
+        />
+      </div>
+
+      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} />
+
 
     </div>
   );

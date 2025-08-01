@@ -30,7 +30,7 @@
 .data-table {
   border-collapse: collapse;
   width: 100%;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 }
 
 .data-table th,
@@ -335,4 +335,44 @@ width: 100%;
   .submit-btn {
     width: 100%;
   }
+}
+
+/* .table-wrapper {
+  overflow: auto; 
+} */
+
+.pagination-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-controls button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #0052cc;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+.dashboard-overview {
+  background-color: #f4f5f7;
+  padding: 16px;
+  border-radius: 8px;
+}
+.dashboard-item {
+  background: white;
+  padding: 12px;
+  border: 1px solid #dfe1e6;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.1);
 }
