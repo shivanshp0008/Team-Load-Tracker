@@ -179,6 +179,12 @@ input[type="text"],
   box-sizing: border-box; /* ✅ Ensures padding doesn’t exceed width */
 }
 
+.table-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .custom-datepicker {
   width: 100%;
   padding: 10px;
