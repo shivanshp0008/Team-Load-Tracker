@@ -13,6 +13,7 @@ import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
 import { getPaginationRowModel } from '@tanstack/react-table';
 import Select from '@atlaskit/select';
+import DashboardSummary from '../summary/DashboardSummary';
 
 
 const TeamAllocation = ({ data, filters, onBack }) => {
@@ -60,6 +61,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
     const names = Array.from(
       new Set(filteredData.map((item) => item.fields.assignee?.displayName || "Unassigned"))
     );
+    console.log("names", names)
     return [{ label: "All", value: null }, ...names.map((n) => ({ label: n, value: n }))];
   }, [filteredData]);
 
@@ -207,81 +209,14 @@ const TeamAllocation = ({ data, filters, onBack }) => {
   };
 
   return (
-    <div className="table-wrapper">
-      {/* <div className="search-container">
-        <div className="table-header">
-          <button onClick={onBack} className="back-btn">
-            ← Back to Form
-          </button>
-          <button onClick={() => setShowCharts(true)} className="calculate-btn">Calculate</button>
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="Global search..."
-            value={globalFilter ?? ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            className="table-search"
-          />
-        </div>
-      </div> */}
+    <div className="container">
 
       {/* /////////////// dashboard ////////////////// */}
 
-      <div className="dashboard-overview" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
-        <div className="dashboard-item">
-          <strong>Total Issues:</strong> {filteredData.length}
-        </div>
-        <div className="dashboard-item">
-          <strong>Unassigned Issues:</strong> {filteredData.filter(item => !item.fields.assignee).length}
-        </div>
-        <div className="dashboard-item">
-          <strong>Average ETA:</strong> {
-            (() => {
-              const etas = filteredData.map(item => item.fields.timeoriginalestimate).filter(Boolean);
-              const avgEta = etas.length > 0 ? etas.reduce((a, b) => a + b, 0) / etas.length : 0;
-              return formatSecondsToHrMin(avgEta);
-            })()
-          }
-        </div>
-        <div className="dashboard-item">
-          <strong>Total Time Spent:</strong> {
-            (() => {
-              const total = filteredData.map(item => item.fields.timespent).filter(Boolean).reduce((a, b) => a + b, 0);
-              return formatSecondsToHrMin(total);
-            })()
-          }
-        </div>
-        {/* <div className="dashboard-item">
-          <strong>Average % Done:</strong> {
-            (() => {
-              const percents = filteredData.map(item => item.fields.aggregateprogress?.percent).filter(p => typeof p === 'number');
-              const avg = percents.length > 0 ? percents.reduce((a, b) => a + b, 0) / percents.length : 0;
-              return `${avg.toFixed(1)}%`;
-            })()
-          }
-        </div> */}
-        <div className="dashboard-item">
-          <strong>Issues in Backlog:</strong> {
-            filteredData.filter(item => item.fields.status?.name?.toLowerCase() === 'backlog').length
-          }
-        </div>
-        <div className="dashboard-item">
-          <strong>Overdue Issues:</strong> {
-            (() => {
-              const today = new Date();
-              return filteredData.filter(item => {
-                const dueDate = item.fields.duedate ? new Date(item.fields.duedate) : null;
-                const status = item.fields.status?.name?.toLowerCase();
-                return dueDate && dueDate < today && status !== 'done';
-              }).length;
-            })()
-          }
-        </div>
-      </div>
+     <DashboardSummary filteredData={filteredData} formatSecondsToHrMin={formatSecondsToHrMin} />
 
       {/* /////////////// Table //////////////////// */}
-
+      <div className="table-wrapper">
       <table className="data-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -345,6 +280,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
+      </div>
       <div className="pagination-controls">
         <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           ← Prev
@@ -358,19 +294,32 @@ const TeamAllocation = ({ data, filters, onBack }) => {
       </div>
 
       {/* //////////////// Charts ////////////////////// */}
+      
+    <div className="team-performance-section">
+  <h2 className="select-heading">📊 Analyze Team Performance</h2>
 
-      <div style={{ marginBottom: "1rem", width: "300px" }}>
-        <Select
-          options={userOptions}
-          placeholder="Select Team Member"
-          onChange={(e) => setSelectedUser(e.value)}
-          defaultValue={userOptions[0]}
-        />
-      </div>
+  <label htmlFor="user-select" className="select-label">
+    Select Team Member
+  </label>
+  <div className="select-wrapper">
+  <select
+  id="user-select"
+  className="form-select"
+          onChange={(e) => setSelectedUser(e.target.value === 'All' ? null : e.target.value)}
+  value={selectedUser || 'All'}
+>
+  
+  {userOptions.map((option) => (<>
+    <option key={option.value} value={option.value}>
+      {option.label}
+    </option>
+  </>
+  ))}
+</select>
 
-      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} />
-
-
+  </div>
+</div>
+      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} selectedUser={selectedUser}/>
     </div>
   );
 };
