@@ -176,7 +176,7 @@ const getIssueById = async (issueId) => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  <div>
+                  <div className="table-header">
                     <span
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: "pointer" }}
