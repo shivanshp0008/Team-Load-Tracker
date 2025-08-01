@@ -12,7 +12,6 @@ import ChartsDashboard from '../charts/ChartsDashboard';
 import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
 import { getPaginationRowModel } from '@tanstack/react-table';
-import Select from '@atlaskit/select';
 import DashboardSummary from '../summary/DashboardSummary';
 
 
@@ -223,7 +222,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
                     <span
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: 'pointer' }}
