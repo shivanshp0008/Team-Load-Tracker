@@ -33,6 +33,7 @@ const toDateRef = useRef();
       setSelectedOptions(prev => prev.filter(o => o.value !== option.value));
     } else {
       setSelectedOptions(prev => [...prev, option]);
+      setErrors((prev) => ({ ...prev, select: null }));
     }
         setDropdownOpen(false);
   };
@@ -114,7 +115,11 @@ const toDateRef = useRef();
   <label>From Date:</label>
   <DatePicker
     selected={fromDate}
-    onChange={(date) => setFromDate(date)}
+    // onChange={(date) => setFromDate(date)}
+    onChange={(date) => {
+    setFromDate(date);
+    if (date) setErrors((prev) => ({ ...prev, fromDate: null })); // ✅ clear fromDate error
+  }}
     placeholderText="Select a date"
     inputRef={fromDateRef}
     className="custom-datepicker"
@@ -127,7 +132,11 @@ const toDateRef = useRef();
   <label>To Date:</label>
   <DatePicker
     selected={toDate}
-    onChange={(date) => setToDate(date)}
+    // onChange={(date) => setToDate(date)}
+    onChange={(date) => {
+    setToDate(date);
+    if (date) setErrors((prev) => ({ ...prev, toDate: null })); // ✅ clear toDate error
+  }}
     placeholderText="Select a date"
     inputRef={toDateRef}
     className="custom-datepicker"

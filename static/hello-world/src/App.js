@@ -20,7 +20,6 @@ function App() {
       try {
         const issues = await invoke('getIssues', { projectKey: key });
         setAllIssues(issues);
-        console.log('Fetched Issues:', issues);
       } catch (error) {
         console.error('Error fetching issues:', error);
         setAllIssues([]);
@@ -29,6 +28,10 @@ function App() {
 
     fetchContext();
   }, []);
+
+  console.log('Fetched Issues:', allIssues);
+
+  
 
   return (
     <>
