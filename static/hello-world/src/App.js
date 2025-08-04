@@ -24,7 +24,7 @@ function App() {
     fetchContext();
   }, []);
 
-  console.log('Fetched Issues:', allIssues);
+  console.log('Fetched Issue:', allIssues);
   
   return (
     <>
