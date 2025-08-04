@@ -1,0 +1,394 @@
+
+.column-filter {
+  margin-top: 2px !important;
+  padding: 4px !important;
+  font-size: 12px !important;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.container{
+  margin: 0;
+  padding: 0;
+}
+
+.filter-container{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.table-search {
+ padding: 8px;
+  width: 25%;
+  min-width: 150px;
+  max-width: 100%;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  transition: width 0.2s ease;
+}
+
+.issue-link{
+  cursor: pointer;
+}
+.data-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto;
+  /* margin-bottom: 50px; */
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ccc;
+  padding: 10px !important;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap; 
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+  border-bottom: 2px solid #dfe1e6;
+}
+
+.data-table td {
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.filter-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  /* margin-left: 5px; */
+  padding: 0 4px;
+}
+
+.filter-toggle-btn.active {
+  color: #0052cc; /* or any color to highlight the active one */
+}
+
+.sort-icon {
+  margin-left: 4px;
+  font-size: 0.9em;
+  vertical-align: middle;
+}
+
+.search-container{
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+}
+
+/* Tab  */
+.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.tab-buttons .active-tab {
+  background-color: #007bff;
+  color: white;
+}
+
+.tab-buttons .inactive-tab {
+  background-color: #f0f0f0;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.form-heading{
+      color: #007bff;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* workflow aging form */
+.teamallocation-form, .workflow-form {
+  max-width: 480px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #f4f4f4;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.submit-button-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
+
+label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.workflow-form {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+    cursor: pointer;
+}
+
+input[type="date"],
+input[type="text"],
+.select-display {
+  padding: 10px;
+    cursor: pointer;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box; /* ✅ Ensures padding doesn’t exceed width */
+}
+
+.table-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-datepicker {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+
+.custom-select-container {
+  position: relative;
+}
+
+.select-display {
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+  background: white;
+}
+
+.placeholder {
+  color: #888;
+}
+
+.chip {
+  background: #1976d2;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 20px;
+  margin: 2px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.chip button {
+  margin-left: 6px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  font-size: 14px;
+  padding-left: 8px;
+}
+
+.options-dropdown {
+  position: absolute;
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+  border: 1px solid #aaa;
+  background: white;
+  border-radius: 6px;
+  margin-top: 2px;
+  z-index: 999;
+}
+
+.dropdown-option {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background-color: #e0e0e0;
+}
+
+.dropdown-option.selected {
+  background-color: #cde1ff;
+  font-weight: bold;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.submit-btn {
+  background-color: #1976d2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #125aa5;
+}
+
+
+.pagination-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination-controls button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #0052cc;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* select in team allocation */
+.team-performance-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f4f5f7;
+  border: 1px solid #dfe1e6;
+  border-radius: 8px;
+  max-width: 400px;
+}
+
+.select-heading {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #172b4d;
+  font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
+.select-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #5e6c84;
+  font-weight: 500;
+}
+
+.select-wrapper {
+  width: 100%;
+}
+
+.form-select {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #172b4d;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235e6c84'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 6px;
+}
+
+.form-select:focus {
+  border-color: #0052cc;
+  outline: none;
+  box-shadow: 0 0 0 1px #0052cc;
+}
+
+
+
+
+
+/* For tablets and smaller laptops */
+@media (max-width: 1024px) {
+  .table-search {
+    width: 40%;
+  }
+}
+
+/* For mobile screens */
+@media (max-width: 600px) {
+  .table-search {
+    width: 90%;
+  }
+   .workflow-form {
+    padding: 15px;
+  }
+
+  .submit-btn {
+    width: 100%;
+  }
+}
+
+/* .table-wrapper {
+  overflow: auto; 
+} */
+
+
+

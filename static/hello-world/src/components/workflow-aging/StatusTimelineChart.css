@@ -1,0 +1,37 @@
+.timeline-chart-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.timeline-chart-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px 32px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eee;
+}
+
+.timeline-chart-title {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  font-size: 18px;
+}
+
+.custom-tooltip {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.bar-label {
+  fill: #222;
+  font-size: 12px;
+  font-weight: bold;
+}
