@@ -17,6 +17,7 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
   const [selectedIssueData, setSelectedIssueData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
@@ -93,6 +94,9 @@ const WorkFlowAging = ({ data, filters, onBack }) => {
 
 const getIssueById = async (issueId) => {
   try {
+    setLoading(true); // start loading
+    // setSelectedIssueData([]); // reset previous selection
+
     const issue = await invoke('getIssueById', { IssueId: issueId });
     const issuelog = await invoke('getIssueLogById', { IssueId: issueId });
 
@@ -142,11 +146,13 @@ const getIssueById = async (issueId) => {
     });
 
     setSelectedIssueData(statusWithDurations);
-
   } catch (error) {
     console.error('Error fetching issue by ID:', error);
+  } finally {
+    setLoading(false); // end loading
   }
 };
+
 
 
 
@@ -166,8 +172,9 @@ const getIssueById = async (issueId) => {
     getSortedRowModel: getSortedRowModel(),
   });
 
+  console.log("loading" , loading);
   return (
-    <div className="table-wrapper">
+
       
       <div className="table-wrapper">
       <table className="data-table">
@@ -236,13 +243,23 @@ const getIssueById = async (issueId) => {
           ))}
         </tbody>
       </table>
+   <div className="table-footer">
+    {loading && (
+      <div className="loading-indicator">
+        ⏳ Loading issue data...
+      </div>
+    )}
+
+    {!loading && selectedIssueData?.length > 0 && (
+      <StatusTimelineChart statusData={selectedIssueData} />
+    )}
+  </div>
       </div>
 
-      {selectedIssueData?.length > 0 && (
-    <StatusTimelineChart statusData={selectedIssueData} />
-)}
 
-    </div>
+
+
+
   );
 };
 

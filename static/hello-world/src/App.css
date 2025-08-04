@@ -362,6 +362,18 @@ input[type="text"],
 }
 
 
+.loading-indicator {
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #0052CC;
+}
+
+.table-footer {
+  padding: 8px 0;
+}
+
 
 
 
