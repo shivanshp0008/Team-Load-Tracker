@@ -11,7 +11,7 @@ import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
 import StatusTimelineChart from "./StatusTimelineChart";
 
-const WorkFlowAging = ({ data, filters, onBack }) => {
+const WorkFlowAging = ({ data, filters }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
@@ -149,7 +149,6 @@ const getIssueById = async (issueId) => {
 };
 
 
-
   const table = useReactTable({
     data: filteredData,
     columns,
@@ -176,13 +175,7 @@ const getIssueById = async (issueId) => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
+                  <div className="table-header">
                     <span
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: "pointer" }}

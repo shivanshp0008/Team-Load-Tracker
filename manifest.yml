@@ -1,10 +1,10 @@
 modules:
   jira:projectPage:
-    - key: team-load-tracker-hello-world-project-page
+    - key: workflow-aging-and-team-allocation-hello-world-project-page
       resource: main
       resolver:
         function: resolver
-      title: Team Load Tracker
+      title:  Workflow Aging and Team Allocation
   function:
     - key: resolver
       handler: index.handler
@@ -24,4 +24,5 @@ app:
     name: nodejs22.x
     memoryMB: 256
     architecture: arm64
-  id: ari:cloud:ecosystem::app/a56c026a-eb29-4910-944a-083c212b2ec8
+  id: ari:cloud:ecosystem::app/fc3145d6-fb45-4d96-86ae-00580579fb74
+

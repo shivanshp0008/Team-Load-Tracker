@@ -30,6 +30,17 @@ const Home = ({ data }) => {
   return (
     <>
       <div className="tab-buttons">
+
+          <button
+    onClick={() => {
+      setActiveTab("team");
+      setTeamFormData(null);
+    }}
+    className={activeTab === "team" ? "tab active-tab" : "tab inactive-tab"}
+  >
+    Team Allocation
+  </button>
+  
   <button
     onClick={() => {
       setActiveTab("workflow");
@@ -40,15 +51,7 @@ const Home = ({ data }) => {
     Workflow Aging
   </button>
 
-  <button
-    onClick={() => {
-      setActiveTab("team");
-      setTeamFormData(null);
-    }}
-    className={activeTab === "team" ? "tab active-tab" : "tab inactive-tab"}
-  >
-    Team Allocation
-  </button>
+
 </div>
 
 

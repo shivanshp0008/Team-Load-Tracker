@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 
-const WorkFlowForm = ({ data, onSubmit }) => {
+const WorkFlowForm = ({ data, onSubmit, onBack }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [errors, setErrors] = useState({});
@@ -58,8 +58,8 @@ const WorkFlowForm = ({ data, onSubmit }) => {
 
   return (
     <>
-      <h1 className='form-heading'>WorkFlow Aging</h1>
       <form className="workflow-form" onSubmit={handleSubmit}>
+      <h1 className='form-heading'>WorkFlow Aging</h1>
         <div className="form-group">
           <label>Select Issues:</label>
           <div className="custom-select-container">
@@ -97,7 +97,9 @@ const WorkFlowForm = ({ data, onSubmit }) => {
           {errors.select && <div className="error-text">{errors.select}</div>}
         </div>
 
-        <button type="submit" className="submit-btn">Submit</button>
+<div className='submit-button-container'>
+      <button type="submit" className="submit-btn">Submit</button>
+</div>
       </form>
     </>
   );

@@ -6,13 +6,13 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   flexRender,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import ChartsDashboard from '../charts/ChartsDashboard';
 import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
-import { getPaginationRowModel } from '@tanstack/react-table';
-import Select from '@atlaskit/select';
+import DashboardSummary from '../summary/DashboardSummary';
 
 
 const TeamAllocation = ({ data, filters, onBack }) => {
@@ -20,12 +20,8 @@ const TeamAllocation = ({ data, filters, onBack }) => {
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [visibleFilters, setVisibleFilters] = useState({});
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 5,
-  });
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [selectedUser, setSelectedUser] = useState(null);
-
 
   const filteredData = useMemo(() => {
     if (!filters) return data;
@@ -44,29 +40,25 @@ const TeamAllocation = ({ data, filters, onBack }) => {
 
       const matchDate =
         fromDate && toDate
-          ? new Date(created) >= new Date(fromDate) &&
-          new Date(created) <= new Date(toDate)
+          ? new Date(created) >= new Date(fromDate) && new Date(created) <= new Date(toDate)
           : true;
 
       return matchAssignee && matchDate;
     });
   }, [data, filters]);
 
-  useEffect(() => {
-    console.log("filteredData", filteredData)
-  }, [filters])
-
   const userOptions = useMemo(() => {
     const names = Array.from(
-      new Set(filteredData.map((item) => item.fields.assignee?.displayName || "Unassigned"))
+      new Set(filteredData.map((item) => item.fields.assignee?.displayName || 'Unassigned'))
     );
+    console.log("names", names)
     return [{ label: "All", value: null }, ...names.map((n) => ({ label: n, value: n }))];
   }, [filteredData]);
 
   const analyzedData = useMemo(() => {
-    if (!selectedUser) return filteredData;
+    if (!selectedUser || selectedUser === 'All') return filteredData;
     return filteredData.filter(
-      (item) => (item.fields.assignee?.displayName || "Unassigned") === selectedUser
+      (item) => (item.fields.assignee?.displayName || 'Unassigned') === selectedUser
     );
   }, [filteredData, selectedUser]);
 
@@ -82,22 +74,17 @@ const TeamAllocation = ({ data, filters, onBack }) => {
     return dayjs(dateString).format('DD MMM YYYY');
   };
 
-
-
   const columns = useMemo(
     () => [
       {
         header: 'Issue ID',
         accessorKey: 'id',
-        accessorFn: (row) =>
-          typeof row.id === 'string' ? row.id : row.id?.toString() || '[Unsupported Format]',
+        accessorFn: (row) => row.id?.toString() || '[Unsupported Format]',
         cell: ({ row }) => {
           const issueId = row.original.id;
           return (
             <a
               onClick={() => getIssueById(issueId)}
-              rel="noopener noreferrer"
-              className="issue-link"
               style={{ cursor: 'pointer', color: 'blue' }}
             >
               {issueId}
@@ -109,10 +96,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
       {
         header: 'Issue Type',
         accessorFn: (row) => row.fields.issuetype?.name || 'Unknown Type',
-        cell: ({ row }) => {
-          const issueType = row.original.fields.issuetype?.name;
-          return <span className="issue-type">{issueType || 'Unknown Type'}</span>;
-        },
         filterFn: 'includesString',
       },
       {
@@ -130,16 +113,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
         accessorFn: (row) => row.fields.priority?.name || 'No Priority',
         filterFn: 'includesString',
       },
-      // {
-      //   header: 'Summary',
-      //   accessorFn: (row) => {
-      //     const summary = row.fields.summary;
-      //     return typeof summary === 'string'
-      //       ? summary
-      //       : summary?.content?.[0]?.content?.[0]?.text || '[Unsupported Format]';
-      //   },
-      //   filterFn: 'includesString',
-      // },
       {
         header: 'ETA',
         accessorFn: (row) => formatSecondsToHrMin(row.fields.timeoriginalestimate),
@@ -163,9 +136,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
             ? `${row.fields.aggregateprogress.percent}%`
             : 'N/A',
       },
-      // {
-      //   header: 'ACD',
-      // },
     ],
     []
   );
@@ -173,12 +143,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
   const table = useReactTable({
     data: filteredData,
     columns,
-    state: {
-      globalFilter,
-      sorting,
-      columnFilters,
-      pagination,
-    },
+    state: { globalFilter, sorting, columnFilters, pagination },
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -188,7 +153,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
-
 
   const toggleFilter = (columnId) => {
     setVisibleFilters((prev) => {
@@ -211,76 +175,24 @@ const TeamAllocation = ({ data, filters, onBack }) => {
 
       {/* /////////////// dashboard ////////////////// */}
 
-      <div className="dashboard-overview" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '20px' }}>
-        <div className="dashboard-item">
-          <strong>Total Issues:</strong> {filteredData.length}
-        </div>
-        <div className="dashboard-item">
-          <strong>Unassigned Issues:</strong> {filteredData.filter(item => !item.fields.assignee).length}
-        </div>
-        <div className="dashboard-item">
-          <strong>Average ETA:</strong> {
-            (() => {
-              const etas = filteredData.map(item => item.fields.timeoriginalestimate).filter(Boolean);
-              const avgEta = etas.length > 0 ? etas.reduce((a, b) => a + b, 0) / etas.length : 0;
-              return formatSecondsToHrMin(avgEta);
-            })()
-          }
-        </div>
-        <div className="dashboard-item">
-          <strong>Total Time Spent:</strong> {
-            (() => {
-              const total = filteredData.map(item => item.fields.timespent).filter(Boolean).reduce((a, b) => a + b, 0);
-              return formatSecondsToHrMin(total);
-            })()
-          }
-        </div>
-        <div className="dashboard-item">
-          <strong>Issues in Backlog:</strong> {
-            filteredData.filter(item => item.fields.status?.name?.toLowerCase() === 'backlog').length
-          }
-        </div>
-        <div className="dashboard-item">
-          <strong>Overdue Issues:</strong> {
-            (() => {
-              const today = new Date();
-              return filteredData.filter(item => {
-                const dueDate = item.fields.duedate ? new Date(item.fields.duedate) : null;
-                const status = item.fields.status?.name?.toLowerCase();
-                return dueDate && dueDate < today && status !== 'done';
-              }).length;
-            })()
-          }
-        </div>
-      </div>
+     <DashboardSummary filteredData={filteredData} formatSecondsToHrMin={formatSecondsToHrMin} />
 
-      {/* /////////////// Table //////////////////// */}
-      <div className="table-wrapper">
       <table className="data-table">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div className='table-header'>
                     <span
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: 'pointer' }}
                     >
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       <span className="sort-icon">
-                        {/* {header.column.getIsSorted() === 'asc'
-                          ? '🔼'
-                          : header.column.getIsSorted() === 'desc'
-                          ? '🔽'
-                          : '🔼'} */}
-                        {header.column.getIsSorted() === 'asc' ? (
-                          <ArrowUpIcon label="Sorted ascending" size="small" />
-                        ) : header.column.getIsSorted() === 'desc' ? (
-                          <ArrowDownIcon label="Sorted descending" size="small" />
-                        ) : (
-                          <ArrowUpIcon label="Unsorted" size="small" />
-                        )}
+                        {header.column.getIsSorted() === 'asc' ? <ArrowUpIcon size="small" /> :
+                          header.column.getIsSorted() === 'desc' ? <ArrowDownIcon size="small" /> :
+                            <ArrowUpIcon size="small" />}
                       </span>
                     </span>
                     {header.column.getCanFilter() && (
@@ -288,7 +200,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
                         onClick={() => toggleFilter(header.column.id)}
                         className={`filter-toggle-btn ${visibleFilters[header.column.id] ? 'active' : ''}`}
                       >
-                        {/* ☰ */}
                         &#8942;
                       </button>
                     )}
@@ -319,33 +230,40 @@ const TeamAllocation = ({ data, filters, onBack }) => {
           ))}
         </tbody>
       </table>
-      </div>
+
       <div className="pagination-controls">
-        <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-          ← Prev
-        </button>
-        <span>
-          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-        </span>
-        <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-          Next →
-        </button>
+        <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>← Prev</button>
+        <span>Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}</span>
+        <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>Next →</button>
       </div>
 
       {/* //////////////// Charts ////////////////////// */}
+      
+    <div className="team-performance-section">
+  <h2 className="select-heading">📊 Analyze Team Performance</h2>
 
-      <div style={{ marginBottom: "1rem", width: "300px" }}>
-        <Select
-          options={userOptions}
-          placeholder="Select Team Member"
-          onChange={(e) => setSelectedUser(e.value)}
-          defaultValue={userOptions[0]}
-        />
-      </div>
+  <label htmlFor="user-select" className="select-label">
+    Select Team Member
+  </label>
+  <div className="select-wrapper">
+  <select
+  id="user-select"
+  className="form-select"
+          onChange={(e) => setSelectedUser(e.target.value === 'All' ? null : e.target.value)}
+  value={selectedUser || 'All'}
+>
+  
+  {userOptions.map((option) => (<>
+    <option key={option.value} value={option.value}>
+      {option.label}
+    </option>
+  </>
+  ))}
+</select>
 
-      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} />
-
-
+  </div>
+</div>
+      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} selectedUser={selectedUser}/>
     </div>
   );
 };

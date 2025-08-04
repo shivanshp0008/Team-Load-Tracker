@@ -17,14 +17,21 @@ import {
 import CalendarHeatmap from "react-calendar-heatmap";
 import "react-calendar-heatmap/dist/styles.css";
 import { subDays, format } from "date-fns";
+import "./ChartsDashboard.css";
 
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#a4de6c", "#00C49F", "#FFBB28"];
 
-
-const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#a4de6c"];
+const STATUS_COLORS = {
+  "To Do": "#8884d8",
+  "In Progress": "#82ca9d",
+  "Done": "#ffc658",
+  "Blocked": "#ff8042",
+  "Unknown": "#ccc",
+};
 
 const ChartsDashboard = ({ data, mode = "all", selectedUser }) => {
-  if (!data || data.length === 0) return null;
-
+  if (!data || data.length === 0) return null ;
+console.log(mode, selectedUser, data)
   const userData = useMemo(() => {
     if (mode === "individual" && selectedUser) {
       return data.filter(
@@ -79,7 +86,7 @@ const ChartsDashboard = ({ data, mode = "all", selectedUser }) => {
 
 
   const etaAccuracyData = useMemo(() => {
-    return userData.map((item, index) => ({
+    return userData.map((item) => ({
       name: item.key,
       estimated: item.fields.timeoriginalestimate || 0,
       actual: item.fields.timespent || 0,
@@ -155,13 +162,28 @@ const ChartsDashboard = ({ data, mode = "all", selectedUser }) => {
                     nameKey="name"
                     outerRadius={100}
                     label={({ name, count }) => `${name}: ${count}`}
+                    isAnimationActive
+                    animationDuration={1000}
+                    animationEasing="ease-in-out"
                   >
                     {assigneeData.map((entry, index) => (
                       <Cell key={index} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
                   <Tooltip />
-                  <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                  <Legend
+                    verticalAlign="bottom"
+                    align="center"
+                    formatter={(value) => (
+                      <span className="custom-legend-item">
+                        <span
+                          className="legend-color-box"
+                          style={{ backgroundColor: STATUS_COLORS[value] || "#ccc" }}
+                        ></span>
+                        {value}
+                      </span>
+                    )}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -183,7 +205,7 @@ const ChartsDashboard = ({ data, mode = "all", selectedUser }) => {
             </div>
 
             <div className="chart-card">
-              <h1 className="chart-heading">Status Distribution</h1>
+              <h2>Status Distribution</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -192,13 +214,31 @@ const ChartsDashboard = ({ data, mode = "all", selectedUser }) => {
                     nameKey="name"
                     outerRadius={100}
                     label={({ name, value }) => `${name}: ${value}`}
+                    isAnimationActive
+                    animationDuration={1000}
+                    animationEasing="ease-in-out"
                   >
                     {statusData.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={index}
+                        fill={STATUS_COLORS[entry.name] || COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
-                  <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                  <Legend
+                    verticalAlign="bottom"
+                    align="center"
+                    formatter={(value) => (
+                      <span className="custom-legend-item">
+                        <span
+                          className="legend-color-box"
+                          style={{ backgroundColor: STATUS_COLORS[value] || "#ccc" }}
+                        ></span>
+                        {value}
+                      </span>
+                    )}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -224,8 +264,20 @@ const ChartsDashboard = ({ data, mode = "all", selectedUser }) => {
                     }}
                   />
                   <Legend />
-                  <Line type="monotone" dataKey="estimated" stroke="#8884d8" />
-                  <Line type="monotone" dataKey="actual" stroke="#82ca9d" />
+                  <Line
+                    type="monotone"
+                    dataKey="estimated"
+                    stroke="#8884d8"
+                    animationDuration={1000}
+                    isAnimationActive
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="actual"
+                    stroke="#82ca9d"
+                    animationDuration={1000}
+                    isAnimationActive
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>

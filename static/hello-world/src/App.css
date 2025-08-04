@@ -1,3 +1,4 @@
+
 .column-filter {
   margin-top: 2px !important;
   padding: 4px !important;
@@ -34,6 +35,9 @@
   transition: width 0.2s ease;
 }
 
+.issue-link{
+  cursor: pointer;
+}
 .data-table {
   border-collapse: collapse;
   width: 100%;
@@ -114,11 +118,13 @@
 }
 
 .form-heading{
-  text-align: center;
-   margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  color: #333;
+      color: #007bff;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 
 /* workflow aging form */
@@ -129,6 +135,12 @@
   background: #f4f4f4;
   border-radius: 10px;
   border: 1px solid #ccc;
+}
+
+.submit-button-container{
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 
@@ -165,6 +177,12 @@ input[type="text"],
   border-radius: 6px;
   width: 100%;
   box-sizing: border-box; /* ✅ Ensures padding doesn’t exceed width */
+}
+
+.table-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .custom-datepicker {
@@ -268,65 +286,81 @@ input[type="text"],
   background-color: #125aa5;
 }
 
-.calculate-btn{
-  margin-left: 10px;
+
+.pagination-controls {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* Heat map */
-.color-github-1 {
-  fill: #c6e48b;
-}
-.color-github-2 {
-  fill: #7bc96f;
-}
-.color-github-3 {
-  fill: #239a3b;
-}
-.color-github-4 {
-  fill: #196127;
-}
-.color-empty {
-  fill: #ebedf0;
+.pagination-controls button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #0052cc;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
-.heatmap-container {
-width: 100%;
- max-Width: 600px;
+.pagination-controls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-.react-calendar-heatmap text {
-  font-size: 8px; /* Shrink label text */
-}
-
-.react-calendar-heatmap rect {
-  rx: 2px;
-  ry: 2px;
-  width: 10px !important;
-  height: 10px !important;
-}
-
-.charts-wrapper {
+/* select in team allocation */
+.team-performance-section {
+  margin-bottom: 24px;
   padding: 16px;
-}
-
-.chart-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 24px;
-}
-
-.chart-card {
-  background: #ffffff;
+  background-color: #f4f5f7;
+  border: 1px solid #dfe1e6;
   border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
 }
 
-.chart-heading {
+.select-heading {
   font-size: 16px;
-  margin-bottom: 12px;
   font-weight: 600;
+  margin-bottom: 12px;
+  color: #172b4d;
+  font-family: "Segoe UI", "Roboto", sans-serif;
 }
+
+.select-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #5e6c84;
+  font-weight: 500;
+}
+
+.select-wrapper {
+  width: 100%;
+}
+
+.form-select {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #dfe1e6;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #172b4d;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235e6c84'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 6px;
+}
+
+.form-select:focus {
+  border-color: #0052cc;
+  outline: none;
+  box-shadow: 0 0 0 1px #0052cc;
+}
+
 
 
 
@@ -356,38 +390,5 @@ width: 100%;
   overflow: auto; 
 } */
 
-.pagination-controls {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: right;
-  align-items: center;
-  gap: 1rem;
-}
-
-.pagination-controls button {
-  padding: 6px 12px;
-  border: none;
-  background-color: #0052cc;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.pagination-controls button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
 
 
-.dashboard-overview {
-  background-color: #f4f5f7;
-  padding: 16px;
-  border-radius: 8px;
-}
-.dashboard-item {
-  background: white;
-  padding: 12px;
-  border: 1px solid #dfe1e6;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.1);
-}
