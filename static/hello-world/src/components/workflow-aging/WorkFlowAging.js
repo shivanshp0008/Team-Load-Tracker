@@ -11,7 +11,7 @@ import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
 import StatusTimelineChart from "./StatusTimelineChart";
 
-const WorkFlowAging = ({ data, filters, onBack }) => {
+const WorkFlowAging = ({ data, filters }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
