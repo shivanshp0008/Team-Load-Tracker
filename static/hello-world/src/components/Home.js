@@ -1,8 +1,10 @@
 import { useState } from "react";
 import TeamAlocation from "./team-alocation/TeamAllocation";
 import WorkFlowAging from "./workflow-aging/WorkFlowAging";
-import WorkFlowForm from "./workflow-aging/WorkFlowForm";
 import TeamAllocationForm from "./team-alocation/TeamAllocationForm";
+import WorkFlowForm from "./workflow-aging/WorkFlowForm";
+// import WorkFlowForm from "./workflow-aging/WorkFlowForm";
+// import TeamAllocationForm from "./team-alocation/TeamAllocationForm";
 
 const Home = ({ data }) => {
   const [activeTab, setActiveTab] = useState("team");
@@ -30,17 +32,6 @@ const Home = ({ data }) => {
   return (
     <>
       <div className="tab-buttons">
-
-          <button
-    onClick={() => {
-      setActiveTab("team");
-      setTeamFormData(null);
-    }}
-    className={activeTab === "team" ? "tab active-tab" : "tab inactive-tab"}
-  >
-    Team Allocation
-  </button>
-  
   <button
     onClick={() => {
       setActiveTab("workflow");
@@ -51,7 +42,15 @@ const Home = ({ data }) => {
     Workflow Aging
   </button>
 
-
+  <button
+    onClick={() => {
+      setActiveTab("team");
+      setTeamFormData(null);
+    }}
+    className={activeTab === "team" ? "tab active-tab" : "tab inactive-tab"}
+  >
+    Team Allocation
+  </button>
 </div>
 
 

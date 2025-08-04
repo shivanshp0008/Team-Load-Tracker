@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const TeamAllocationForm = ({ data, onSubmit, onBack }) => {
+const TeamAllocationForm = ({ data, onSubmit }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 const [fromDate, setFromDate] = useState(null);
@@ -70,8 +70,8 @@ const toDateRef = useRef();
 
   return (
     <>
-    <form className="teamallocation-form" onSubmit={handleSubmit}>
     <h1 className='form-heading'>Team Allocation </h1>
+    <form className="teamallocation-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <label>Select Assignee:</label>
         <div className="custom-select-container">
@@ -147,9 +147,8 @@ const toDateRef = useRef();
 </div>
 
 
-<div className='submit-button-container'>
+
       <button type="submit" className="submit-btn">Submit</button>
-</div>
     </form>
     </>
   );

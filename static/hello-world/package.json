@@ -15,8 +15,11 @@
     "react-calendar-heatmap": "^1.10.0",
     "react-datepicker": "^4.8.0",
     "react-dom": "^16",
+<<<<<<< HEAD
+    "react-heatmap-grid": "^0.9.1",
+=======
     "react-select": "^5.10.2",
-    "react-tooltip": "^5.29.1",
+>>>>>>> c689286cb974ca377c3691e01273cf939bd6f6a9
     "recharts": "^2.1.9"
   },
   "scripts": {

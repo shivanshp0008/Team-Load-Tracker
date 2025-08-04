@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { invoke } from '@forge/bridge';
+import IssueChart from './IssueChart';
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,6 +14,7 @@ import ChartsDashboard from '../charts/ChartsDashboard';
 import ArrowUpIcon from '@atlaskit/icon/glyph/arrow-up';
 import ArrowDownIcon from '@atlaskit/icon/glyph/arrow-down';
 import DashboardSummary from '../summary/DashboardSummary';
+
 
 
 const TeamAllocation = ({ data, filters, onBack }) => {
@@ -51,7 +53,6 @@ const TeamAllocation = ({ data, filters, onBack }) => {
     const names = Array.from(
       new Set(filteredData.map((item) => item.fields.assignee?.displayName || 'Unassigned'))
     );
-    console.log("names", names)
     return [{ label: "All", value: null }, ...names.map((n) => ({ label: n, value: n }))];
   }, [filteredData]);
 
@@ -174,8 +175,8 @@ const TeamAllocation = ({ data, filters, onBack }) => {
     <div className="container">
 
       {/* /////////////// dashboard ////////////////// */}
-
-     <DashboardSummary filteredData={filteredData} formatSecondsToHrMin={formatSecondsToHrMin} />
+  
+  <DashboardSummary filteredData={filteredData} formatSecondsToHrMin={formatSecondsToHrMin} />
 
       <table className="data-table">
         <thead>
@@ -184,6 +185,7 @@ const TeamAllocation = ({ data, filters, onBack }) => {
               {headerGroup.headers.map((header) => (
                 <th key={header.id}>
                   <div className='table-header'>
+
                     <span
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: 'pointer' }}
@@ -238,32 +240,19 @@ const TeamAllocation = ({ data, filters, onBack }) => {
       </div>
 
       {/* //////////////// Charts ////////////////////// */}
-      
-    <div className="team-performance-section">
-  <h2 className="select-heading">📊 Analyze Team Performance</h2>
 
-  <label htmlFor="user-select" className="select-label">
-    Select Team Member
-  </label>
-  <div className="select-wrapper">
-  <select
-  id="user-select"
-  className="form-select"
-          onChange={(e) => setSelectedUser(e.target.value === 'All' ? null : e.target.value)}
-  value={selectedUser || 'All'}
->
-  
-  {userOptions.map((option) => (<>
-    <option key={option.value} value={option.value}>
-      {option.label}
-    </option>
-  </>
-  ))}
-</select>
+      <div style={{ marginBottom: "1rem", width: "300px" }}>
+        <Select
+          options={userOptions}
+          placeholder="Select Team Member"
+          onChange={(e) => setSelectedUser(e.value)}
+          defaultValue={userOptions[0]}
+        />
+      </div>
 
-  </div>
-</div>
-      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} selectedUser={selectedUser}/>
+      <ChartsDashboard data={analyzedData} mode={selectedUser ? "individual" : "all"} />
+
+
     </div>
   );
 };

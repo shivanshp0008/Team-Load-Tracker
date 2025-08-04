@@ -1,9 +1,16 @@
 import Resolver from '@forge/resolver';
 import api, { route } from '@forge/api';
 
+
 const resolver = new Resolver();
+// resolver.define('getProjectKey', async (req) => {
+//     const { projectKey } = req.payload;
+//     console.log('Received project key:', projectKey);
+// });
+
+
 resolver.define('getIssues', async (req) => {
-  const { projectKey } = req.payload;
+    const { projectKey } = req.payload;
 
     try {
         const response = await api.asApp().requestJira(route
@@ -14,8 +21,9 @@ resolver.define('getIssues', async (req) => {
                 }
             }
         );
-        
+
         const data = await response.json();
+        console.log('Issues fetched:', data);
         return data.issues || [];
     } catch (error) {
         console.error('Error fetching issues:', error);
@@ -26,25 +34,31 @@ resolver.define('getIssues', async (req) => {
 resolver.define('getIssueById', async (req) => {
   const { IssueId } = req.payload;
 
-  try {
-    const response = await api.asApp().requestJira(route`
-      /rest/api/3/issue/${IssueId}`,
-      {
-        headers: { 'Accept': 'application/json' },
-      }
-    );
+    try {
+        const response = await api.asApp().requestJira(route
+            `/rest/api/3/issue/${IssueId}`,
+            {
+                headers: {
+                    'Accept': 'application/json',
+                }
+            }
+        );
 
-    if (!response.ok) {
-      throw new Error(`Error fetching issue: ${response.statusText}`);
+        if (!response.ok) {
+            throw new Error(`Error fetching issue: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Fetched single issue:', data);
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching issue by ID:', error);
+        throw new Error('Failed to fetch issue by ID');
     }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching issue by ID:', error);
-    throw new Error('Failed to fetch issue by ID');
-  }
 });
+<<<<<<< HEAD
+=======
 resolver.define('getIssueLogById', async (req) => {
   const { IssueId } = req.payload;
 
@@ -68,5 +82,6 @@ resolver.define('getIssueLogById', async (req) => {
   }
 });
 
+>>>>>>> c689286cb974ca377c3691e01273cf939bd6f6a9
 
 export const handler = resolver.getDefinitions();

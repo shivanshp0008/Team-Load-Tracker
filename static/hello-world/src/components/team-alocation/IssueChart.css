@@ -1,0 +1,30 @@
+.calculate-btn,
+.back-btn {
+  margin-top: 1rem;
+  padding: 8px 16px;
+  background-color: #0366d6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.calculate-btn:hover,
+.back-btn:hover {
+  background-color: #024c9d;
+}
+
+.heatmap-grid.fade-in {
+  animation: fadeInScale 0.8s ease-in-out;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

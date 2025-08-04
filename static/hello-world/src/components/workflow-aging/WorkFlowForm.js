@@ -1,20 +1,17 @@
 import React, { useState, useMemo } from 'react';
 
-const WorkFlowForm = ({ data, onSubmit, onBack }) => {
+const WorkFlowForm = ({ data, onSubmit }) => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [errors, setErrors] = useState({});
-
-  console.log("data",data)
 
   const assigneeOptions = useMemo(() => {
     const uniqueMap = new Map();
     data.forEach(issue => {
       const issueName = issue.fields?.summary;
-      const key = issue.key;
-      if (issueName && key && !uniqueMap.has(key)) {
-        uniqueMap.set(key, {
-          label: `${key} ${issueName}`,
+      if (issueName && !uniqueMap.has(issueName)) {
+        uniqueMap.set(issueName, {
+          label: issueName,
           value: issue.id
         });
       }
@@ -58,8 +55,8 @@ const WorkFlowForm = ({ data, onSubmit, onBack }) => {
 
   return (
     <>
-      <form className="workflow-form" onSubmit={handleSubmit}>
       <h1 className='form-heading'>WorkFlow Aging</h1>
+      <form className="workflow-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Select Issues:</label>
           <div className="custom-select-container">
@@ -97,9 +94,7 @@ const WorkFlowForm = ({ data, onSubmit, onBack }) => {
           {errors.select && <div className="error-text">{errors.select}</div>}
         </div>
 
-<div className='submit-button-container'>
-      <button type="submit" className="submit-btn">Submit</button>
-</div>
+        <button type="submit" className="submit-btn">Submit</button>
       </form>
     </>
   );

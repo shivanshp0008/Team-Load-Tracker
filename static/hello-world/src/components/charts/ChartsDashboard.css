@@ -1,82 +1,33 @@
+
+
 .charts-wrapper {
-  padding: 30px;
-  background: linear-gradient(to bottom, #f8fbfd, #eef1f6);
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  background: #f7f9fc;
 }
 
 .chart-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
 }
 
 .chart-card {
-  background: white;
-  padding: 24px 28px;
-  border-radius: 20px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  transition: all 0.3s ease;
-  border-left: 5px solid #82ca9d;
-  animation: fadeInUp 0.5s ease forwards;
-  opacity: 0;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .chart-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-}
-/* .chart-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-} */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
 
-.chart-card h2,
 .chart-heading {
-  font-size: 22px;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 16px;
   font-weight: 600;
-  margin-bottom: 14px;
-  color: #2f3542;
-  letter-spacing: 0.5px;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.02);
-}
-
-/* Heatmap GitHub Style Colors */
-.color-empty {
-  fill: #eceff1;
-}
-.color-github-1 {
-  fill: #d6e685;
-}
-.color-github-2 {
-  fill: #8cc665;
-}
-.color-github-3 {
-  fill: #44a340;
-}
-.color-github-4 {
-  fill: #1e6823;
-}
-
-/* Fade In Animation */
-@keyframes fadeInUp {
-  0% {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Responsive tweak */
-@media screen and (max-width: 500px) {
-  .chart-card {
-    padding: 20px;
-  }
-
-  .chart-card h2 {
-    font-size: 18px;
-  }
+  color: #333;
 }
